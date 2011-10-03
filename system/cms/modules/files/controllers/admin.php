@@ -170,11 +170,14 @@ class Admin extends Admin_Controller {
 			else
 			{
 				$file = $this->upload->data();
+				$file_name = pathinfo($this->input->post('name'));
 				$data = array(
 					'folder_id'		=> (int) $this->input->post('folder_id'),
 					'user_id'		=> (int) $this->current_user->id,
 					'type'			=> $this->_type,
-					'name'			=> $this->input->post('name'),
+					'name'			=> array_key_exists('extension', $file_name)
+                                            ? basename($file_name['basename'],'.'.$file_name['extension'])
+                                            : $file_name,
 					'description'	=> $this->input->post('description') ? $this->input->post('description') : '',
 					'filename'		=> $file['file_name'],
 					'extension'		=> $file['file_ext'],
@@ -341,11 +344,15 @@ class Admin extends Admin_Controller {
 					$this->file_m->delete_file($id);
 
 					$file = $this->upload->data();
+					$file_name = pathinfo($this->input->post('name'));
+					
 					$data = array(
 						'folder_id'		=> (int) $this->input->post('folder_id'),
 						'user_id'		=> (int) $this->current_user->id,
 						'type'			=> $this->_type,
-						'name'			=> $this->input->post('name'),
+						'name'			=> array_key_exists('extension', $file_name)
+                                            ? basename($file_name['basename'],'.'.$file_name['extension'])
+                                            : $file_name,
 						'description'	=> $this->input->post('description'),
 						'filename'		=> $file['file_name'],
 						'extension'		=> $file['file_ext'],
@@ -390,10 +397,14 @@ class Admin extends Admin_Controller {
 			// Upload data
 			else
 			{
+				$file_name = pathinfo($this->input->post('name'));
+				
 				$data = array(
 					'folder_id'		=> $this->input->post('folder_id'),
 					'user_id'		=> $this->current_user->id,
-					'name'			=> $this->input->post('name'),
+					'name'			=> array_key_exists('extension', $file_name)
+                                            ? basename($file_name['basename'],'.'.$file_name['extension'])
+                                            : $file_name,
 					'description'	=> $this->input->post('description')
 				);
 

@@ -14,7 +14,6 @@ $lang['pages.add_page_chunk']			   = 'Προσθήκη Περιοχής Σελί
 $lang['pages.page_chunk']				   = 'Περιοχής Σελίδας';
 $lang['pages.language_label']              = 'Γλώσσα';
 $lang['pages.updated_label']               = 'Ενημερώθηκε';
-$lang['pages.actions_label']               = 'Ενέργειες';
 $lang['pages.unknown_label']               = 'Άγνωστο';
 $lang['pages.title_label']                 = 'Τίτλος';
 $lang['pages.slug_label']                  = 'URL';
@@ -39,9 +38,7 @@ $lang['pages.current_label']               = 'Τρέχουσα';
 
 $lang['pages.view_label']                  = 'Προβολή';
 $lang['pages.create_label']                = 'Προσθήκη υποσελίδας';
-$lang['pages.edit_label']                  = 'Επεξεργασία';
-$lang['pages.duplicate_label']					= 'Αντίγραφο';
-$lang['pages.delete_label']                = 'Διαγραφή';
+$lang['pages.duplicate_label']			   = 'Αντίγραφο';
 
 // titles
 $lang['pages.create_title']                = 'Προσθήκη σελίδας';
@@ -62,7 +59,7 @@ $lang['pages_mass_delete_success']         = '%s σελίδες διαγράφη
 $lang['pages_delete_none_notice']          = 'Δεν διαγράφηκε καμμία σελίδα.';
 $lang['pages_page_already_exist_error']    = 'Υπάρχει ήδη μια σελίδα με URL "%s" στο %s.';
 $lang['pages_parent_not_exist_error']      = 'Η σελίδα γονέας που έχετε επιλέξει δεν υπάρχει.';
-$lang['pages_root_folder']                = 'the top level'; #translate
+$lang['pages_root_folder']                = 'το ανώτερο επίπεδο';
 
 $lang['pages.tree_explanation']            = 'Η λίστα στα αριστερά αναπαριστά τις σελίδες στον ιστότοπό σας.
 Κάντε κλικ στο εικονίδιο "+" δίπλα από την κάθε σελίδα για να δείξετε σελίδες κάτω από αυτήν. Όταν κάνετε κλικ σε μια σελίδα θα μπορείτε να δείτε πληροφορίες για αυτήν σε αυτήν την περιοχή.';

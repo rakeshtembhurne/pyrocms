@@ -26,11 +26,7 @@ $lang['user_password_confirm_label']           = 'וידוי סיסמה';
 $lang['user_name_label']                       = 'שם';
 $lang['user_joined_label']                     = 'הצתרף';
 $lang['user_last_visit_label']                 = 'ביקור אחרון';
-$lang['user_actions_label']                    = 'פעולות';
 $lang['user_never_label']                      = 'אף פעם';
-$lang['user_delete_label']                     = 'מחק';
-$lang['user_edit_label']                       = 'ערוך';
-$lang['user_view_label']                       = 'הצג';
 
 $lang['user_no_inactives']                     = 'אין משתמשים לא פעילים.';
 $lang['user_no_registred']                     = 'אין משתמשים רשומים.';
@@ -70,6 +66,7 @@ $lang['user_lang']                             = 'שפה';
 
 $lang['user_activation_code']                  = 'קוד הפעלה';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username'; #translate
 $lang['user_reset_password_link']              = 'שכחת סיסמה?';
 
 $lang['user_activation_code_sent_notice']      = 'אימייל עם קוד הפעלה נשלח אליך.';

@@ -15,7 +15,6 @@ $lang['pages.add_page_chunk']						= 'Add Page Chunk';
 $lang['pages.page_chunk']							= 'Page Chunk';
 $lang['pages.language_label']						= 'Language';
 $lang['pages.updated_label']						= 'Updated';
-$lang['pages.actions_label']						= 'Actions';
 $lang['pages.unknown_label']						= 'Unknown';
 $lang['pages.title_label']							= 'Title';
 $lang['pages.slug_label']							= 'URL';
@@ -42,16 +41,14 @@ $lang['pages.current_label']						= 'Current';
 
 $lang['pages.view_label']							= 'View';
 $lang['pages.create_label']							= 'Add child';
-$lang['pages.edit_label']							= 'Edit';
 $lang['pages.duplicate_label']						= 'Duplicate';
-$lang['pages.delete_label']							= 'Delete';
 
 // titles
-$lang['pages.create_title']							= 'Add page';
-$lang['pages.edit_title']							= 'Edit page "%s"';
-$lang['pages.list_title']							= 'List pages';
-$lang['pages.layouts_create_title']					= 'Add page layout';
-$lang['pages.layouts_list_title']					= 'List page layouts';
+$lang['pages.create_title']							= 'Add Page';
+$lang['pages.edit_title']							= 'Edit Page "%s"';
+$lang['pages.list_title']							= 'Pages';
+$lang['pages.layouts_create_title']					= 'Add Page Layout';
+$lang['pages.layouts_list_title']					= 'Layouts';
 
 // messages
 $lang['pages.no_pages']								= 'There are no pages.';

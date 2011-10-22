@@ -26,11 +26,7 @@ $lang['user_password_confirm_label'] = 'Confirmez mot de passe';
 $lang['user_name_label'] = 'Surnom';
 $lang['user_joined_label'] = 'Inscrit';
 $lang['user_last_visit_label'] = 'Dernière visite';
-$lang['user_actions_label'] = 'Actions';
 $lang['user_never_label'] = 'Jamais';
-$lang['user_delete_label'] = 'Supprimer';
-$lang['user_edit_label'] = 'Modifier';
-$lang['user_view_label'] = 'Visualiser';
 
 $lang['user_no_inactives'] = 'Il n\'y a aucun utilisateurs actifs.';
 $lang['user_no_registred'] = 'Il n\'y a aucun utilisateurs enregistrés.';
@@ -62,6 +58,7 @@ $lang['user_lang']			= 'Langue';
 
 $lang['user_activation_code'] = 'Code d\'activation';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username'; #translate
 $lang['user_reset_password_link'] = 'Mot de passe oublié ?';
 
 $lang['user_activation_code_sent_notice'] = 'Un e-mail vous a été envoyé avec votre code d\'activation.';

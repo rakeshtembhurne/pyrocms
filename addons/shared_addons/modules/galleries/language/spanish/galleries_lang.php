@@ -22,15 +22,12 @@ $lang['galleries.no_gallery_description']	= 'Todavía no se ha agregado una desc
 # Labels
 $lang['galleries.galleries_label']			= 'Galerías';
 $lang['galleries.manage_gallery_label']		= 'Administrar Galerías';
-$lang['galleries.new_gallery_label']		= 'Nueva Galería';
 
 $lang['galleries.gallery_label']			= 'Álbum';
 $lang['galleries.num_photos_label']			= 'Número de Imágenes';
 $lang['galleries.updated_label']			= 'Última Actualización';
-$lang['galleries.actions_label']			= 'Acciones';
 $lang['galleries.view_label']				= 'Vistas';
 $lang['galleries.manage_label']				= 'Administrar';
-$lang['galleries.delete_label']				= 'Eliminar';
 $lang['galleries.comments_enabled_label']	= 'Si';
 $lang['galleries.comments_disabled_label']	= 'No';
 $lang['galleries.published_yes_label']		= 'Si';

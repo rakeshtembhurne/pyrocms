@@ -5,7 +5,6 @@ $lang['nav_title_label'] 						= 'Titel';
 $lang['nav_target_label']						= 'Doel';
 $lang['nav_class_label']						= 'Klasse';
 $lang['nav_url_label'] 							= 'URL';
-$lang['nav_actions_label'] 						= 'Acties';
 $lang['nav_details_label'] 						= 'Details';
 $lang['nav_text_label'] 						= 'Tekst';
 $lang['nav_group_label'] 						= 'Groep';
@@ -15,9 +14,6 @@ $lang['nav_uri_label'] 							= 'Sitenaam (URI)';
 $lang['nav_page_label'] 						= 'Pagina';
 $lang['nav_module_label'] 						= 'Module';
 $lang['nav_abbrev_label'] 						= 'Afkorting';
-$lang['nav_edit_label'] 						= 'Wijzig';
-$lang['nav_delete_label'] 						= 'Verwijder';
-$lang['nav_group_delete_label']					= 'Verwijder groep';
 
 $lang['nav_link_target_self'] 					= 'Huidig scherm (default)';
 $lang['nav_link_target_blank'] 					= 'Nieuw scherm (_blank)';
@@ -27,6 +23,7 @@ $lang['nav_link_create_title'] 					= 'Voeg navigatielink toe';
 $lang['nav_group_create_title']					= 'Voeg een groep toe';
 $lang['nav_link_edit_title'] 					= 'Wijzig navigatielink "%s"';
 $lang['nav_link_list_title'] 					= 'Overzicht koppelingen';
+$lang['nav_group_list_title']                   = 'Groups'; #translate
 
 // messages
 $lang['nav_group_no_links'] 					= 'Er zijn geen koppelingen in deze groep.';

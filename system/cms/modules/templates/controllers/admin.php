@@ -26,21 +26,19 @@ class Admin extends Admin_Controller {
         $this->lang->load('templates');
         $this->load->model('email_templates_m');
 
-        foreach($this->config->item('supported_languages') as $key => $lang)
+        foreach ($this->config->item('supported_languages') as $key => $lang)
         {
             $lang_options[$key] = $lang['name'];
         }
 
-        $this->template
-			->set('lang_options', $lang_options)
-			->set_partial('shortcuts', 'admin/partials/shortcuts');
+        $this->template->set('lang_options', $lang_options);
 
         $base_rules = 'required|trim|xss_clean';
 
         $this->_validation_rules = array(
 			array(
 				'field' => 'name',
-				'label' => 'lang:templates.name_label',
+				'label' => 'lang:global:name',
 				'rules' => $base_rules
 			),
 			array(
@@ -50,7 +48,7 @@ class Admin extends Admin_Controller {
 			),
 			array(
 				'field' => 'description',
-				'label' => 'lang:templates.description_label',
+				'label' => 'lang:global:description',
 				'rules' => $base_rules
 			),
 			array(

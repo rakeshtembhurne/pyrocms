@@ -26,11 +26,7 @@ $lang['user_password_confirm_label']           = 'Patvortinti spaltažodį';
 $lang['user_name_label']                       = 'Vardas';
 $lang['user_joined_label']                     = 'Prisijungę';
 $lang['user_last_visit_label']                 = 'Paskutinis vizitas';
-$lang['user_actions_label']                    = 'Veiksmai';
 $lang['user_never_label']                      = 'Nė karto';
-$lang['user_delete_label']                     = 'Ištrinti';
-$lang['user_edit_label']                       = 'Redaguoti';
-$lang['user_view_label']                       = 'Peržiūrėti';
 
 $lang['user_no_inactives']                     = 'Nėra neaktyvių vartotojų.';
 $lang['user_no_registred']                     = 'Nėra registruotų vartotojų.';
@@ -70,6 +66,7 @@ $lang['user_lang']                             = 'Kalba';
 
 $lang['user_activation_code']                  = 'Aktyvacijos kodas';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username'; #translate
 $lang['user_reset_password_link']              = 'Pamiršote slaptažodį?';
 
 $lang['user_activation_code_sent_notice']      = 'Laiškas buvo išsiųsta su jūsų aktyvacijos kodu.';

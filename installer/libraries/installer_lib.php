@@ -181,6 +181,17 @@ class Installer_lib {
 	}
 
 	/**
+	 * @return bool
+	 * Make sure the database name is a valid mysql identifier
+	 * 
+	 */
+	 public function validate_mysql_db_name($db_name)
+	 {
+	 	$expr = '/[^A-Za-z0-9_]+/';
+	 	return !(preg_match($expr,$db_name)>0);
+	 }
+
+	/**
 	 * @return 	mixed
 	 *
 	 * Make sure we can connect to the database
@@ -234,6 +245,8 @@ class Installer_lib {
 		{
 			return array('status' => FALSE,'message' => 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.');
 		}
+		
+		@mysql_set_charset('utf8', $this->db);
 
 		// Do we want to create the database using the installer ?
 		if ( ! empty($data['create_db'] ))

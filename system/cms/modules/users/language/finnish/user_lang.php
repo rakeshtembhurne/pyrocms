@@ -33,11 +33,7 @@ $lang['user_password_confirm_label']           = 'Vahvista salasana';
 $lang['user_name_label']                       = 'Nimi';
 $lang['user_joined_label']                     = 'Liittynyt';
 $lang['user_last_visit_label']                 = 'Viimeksi paikalla';
-$lang['user_actions_label']                    = 'Toiminnot';
 $lang['user_never_label']                      = 'Ei koskaan';
-$lang['user_delete_label']                     = 'Poista';
-$lang['user_edit_label']                       = 'Muokkaa';
-$lang['user_view_label']                       = 'Katso';
 
 $lang['user_no_inactives']                     = 'Ei-aktiivisia käyttäjiä ei löytynyt.';
 $lang['user_no_registred']                     = 'Rekisteröityneitä käyttäjiä ei löytynyt.';
@@ -77,6 +73,7 @@ $lang['user_lang']                             = 'Kieli';
 
 $lang['user_activation_code']                  = 'Aktivointi koodi';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username'; #translate
 $lang['user_reset_password_link']              = 'Unohditko salasanan?';
 
 $lang['user_activation_code_sent_notice']      = 'Aktivointi koodi lähetettiin sähköpostiisi.';

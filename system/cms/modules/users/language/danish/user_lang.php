@@ -26,11 +26,7 @@ $lang['user_password_confirm_label']           = 'Bekræft password';
 $lang['user_name_label']                       = 'Navn';
 $lang['user_joined_label']                     = 'Deltog';
 $lang['user_last_visit_label']                 = 'Sidste besøg';
-$lang['user_actions_label']                    = 'Handlinger';
 $lang['user_never_label']                      = 'Aldrig';
-$lang['user_delete_label']                     = 'Slet';
-$lang['user_edit_label']                       = 'Redigér';
-$lang['user_view_label']                       = 'Se';
 
 $lang['user_no_inactives']                     = 'Der er ingen inaktive brugere.';
 $lang['user_no_registred']                     = 'Der er ingen registrede brugere.';
@@ -71,6 +67,7 @@ $lang['user_lang']                             = 'Sprog';
 
 $lang['user_activation_code']                  = 'Aktiveringskode';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username'; #translate
 $lang['user_reset_password_link']              = 'Glemt password?';
 
 $lang['user_activation_code_sent_notice']      = 'Du modtager nu en e-mail med din aktiveringskode.';

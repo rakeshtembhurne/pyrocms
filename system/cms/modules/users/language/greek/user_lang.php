@@ -26,11 +26,7 @@ $lang['user_password_confirm_label']           = 'Επανάληψη Συνθη�
 $lang['user_name_label']                       = 'Όνομα';
 $lang['user_joined_label']                     = 'Ημ/νια εγγραφής';
 $lang['user_last_visit_label']                 = 'Τελευταία επίσκεψη';
-$lang['user_actions_label']                    = 'Ενέργειες';
 $lang['user_never_label']                      = 'Ποτέ';
-$lang['user_delete_label']                     = 'Διαγραφή';
-$lang['user_edit_label']                       = 'Επεξεργασία';
-$lang['user_view_label']                       = 'Προβολή';
 
 $lang['user_no_inactives']                     = 'Δεν υπάρχουν ανενεργοί χρήστες.';
 $lang['user_no_registred']                     = 'Δεν υπάρχουν εγγεγραμμένοι χρήστες.';
@@ -57,7 +53,7 @@ $lang['user_first_name']                       = 'Όνομα';
 $lang['user_last_name']                        = 'Επίθετο';
 $lang['user_username']                         = 'Όνομα χρήστη';
 $lang['user_display_name']                     = 'Όνομα εμφάνισης';
-$lang['user_email_use'] 					   = 'που χρησιμοποιείται για την σύνδεση'
+$lang['user_email_use'] 					   = 'που χρησιμοποιείται για την σύνδεση';
 $lang['user_email']                            = 'E-mail';
 $lang['user_confirm_email']                    = 'Επανάληψη E-mail';
 $lang['user_password']                         = 'Συνθηματικό';
@@ -70,6 +66,7 @@ $lang['user_lang']                             = 'Γλώσσα';
 
 $lang['user_activation_code']                  = 'Κωδικός ενεργοποίησης';
 
+$lang['user_reset_instructions']			   = 'Εισάγετε την διεύθυνση email ή το όνομα χρήστη σας';
 $lang['user_reset_password_link']              = 'Ξεχάσατε το συνθηματικό σας;';
 
 $lang['user_activation_code_sent_notice']      = 'Έχει σταλλεί ένα email με τον κωδικό ενεργοποίησης του λογαριασμού σας.';

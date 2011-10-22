@@ -26,11 +26,7 @@ $lang['user_password_confirm_label'] 	= 'Bevestig Wachtwoord';
 $lang['user_name_label'] 				= 'Naam';
 $lang['user_joined_label'] 				= 'Lid sinds';
 $lang['user_last_visit_label'] 			= 'Laatste bezoek';
-$lang['user_actions_label'] 			= 'Acties';
 $lang['user_never_label'] 				= 'Nooit';
-$lang['user_delete_label'] 				= 'Verwijder';
-$lang['user_edit_label'] 				= 'Wijzig';
-$lang['user_view_label'] 				= 'Bekijk';
 
 $lang['user_no_inactives'] 				= 'Er zijn geen inactieve gebruikers';
 $lang['user_no_registred'] 				= 'Er zijn geen geregistreerde gebruikers';
@@ -70,6 +66,7 @@ $lang['user_lang']						= 'Taal';
 
 $lang['user_activation_code'] 			= 'Activeringscode';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username'; #translate
 $lang['user_reset_password_link'] 		= 'Wachtwoord vergeten?';
 
 $lang['user_activation_code_sent_notice']	= 'Er is een email naar u gestuurd met daarin uw activeringscode.';

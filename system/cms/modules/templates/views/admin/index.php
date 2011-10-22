@@ -1,19 +1,21 @@
 <?php if(!empty($templates)): ?>
-	<section class="title"></section>
-	<section class="item">
+
+<section class="title">
+	<h4><?php echo lang('templates.default_title'); ?></h4>
+</section>
+	
+<section class="item">
+
     <?php echo form_open('admin/templates/action'); ?>
 
     <table border="0" class="table-list clear-both">
         <thead>
-			<tr>
-				<th colspan="5"><?php echo lang('templates.default_title'); ?></th>
-			</tr>
             <tr>
                 <th><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all'));?></th>
-                <th><?php echo lang('templates.name_label'); ?></th>
-                <th><?php echo lang('templates.description_label'); ?></th>
+                <th><?php echo lang('name_label'); ?></th>
+                <th><?php echo lang('global:description'); ?></th>
                 <th><?php echo lang('templates.language_label'); ?></th>
-                <th width="350" class="align-center"><?php echo lang('templates.actions_label'); ?></th>
+                <th width="220"></th>
             </tr>
         </thead>
 
@@ -26,7 +28,7 @@
                 <td><?php echo $template->name; ?></td>
                 <td><?php echo $template->description; ?></td>
                 <td><?php echo $template->lang; ?></td>
-                <td>
+                <td class="actions">
 				<div class="buttons buttons-small align-center">
 					<?php echo anchor('admin/templates/preview/' . $template->id, lang('buttons.preview'), 'class="button preview modal"'); ?>
                     <?php echo anchor('admin/templates/edit/' . $template->id, lang('buttons.edit'), 'class="button edit"'); ?>
@@ -39,19 +41,29 @@
 	</tbody>
 	</table>
     <?php echo form_close(); ?>
-    <?php echo form_open('admin/templates/delete'); ?>
-	
+ 
+ 	<div class="table_action_buttons">
+		<?php $this->load->view('admin/partials/buttons', array('buttons' => array('delete') )); ?>
+	</div>
+
+</section>
+
+<section class="title">
+	<h4><?php echo lang('templates.user_defined_title'); ?></h4>
+</section>
+
+<?php echo form_open('admin/templates/delete'); ?>
+   
+<section class="item">
+
 	<table border="0" class="table-list clear-both">
         <thead>
-			<tr>
-				<th colspan="5"><?php echo lang('templates.user_defined_title'); ?></th>
-			</tr>
             <tr>
                 <th><?php echo form_checkbox(array('name' => 'action_to_all', 'class' => 'check-all'));?></th>
-                <th><?php echo lang('templates.name_label'); ?></th>
-                <th><?php echo lang('templates.description_label'); ?></th>
+                <th><?php echo lang('name_label'); ?></th>
+                <th><?php echo lang('global:description'); ?></th>
                 <th><?php echo lang('templates.language_label'); ?></th>
-                <th width="350" class="align-center"><?php echo lang('templates.actions_label'); ?></th>
+                <th width="200"></th>
             </tr>
         </thead>
 
@@ -64,7 +76,7 @@
                 <td><?php echo $template->name; ?></td>
                 <td><?php echo $template->description; ?></td>
                 <td><?php echo $template->lang; ?></td>
-                <td>
+                <td class="actions">
 				<div class="buttons buttons-small align-center">
 					<?php echo anchor('admin/templates/preview/' . $template->id, lang('buttons.preview'), 'class="button preview"'); ?>
                     <?php echo anchor('admin/templates/edit/' . $template->id, lang('buttons.edit'), 'class="button edit"'); ?>
@@ -79,7 +91,7 @@
         </tbody>
     </table>
 
-	<div class="buttons padding-top alignright">
+	<div class="table_action_buttons">
 		<?php $this->load->view('admin/partials/buttons', array('buttons' => array('delete') )); ?>
 	</div>
 

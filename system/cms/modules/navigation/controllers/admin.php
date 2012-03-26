@@ -145,7 +145,7 @@ class Admin extends Admin_Controller {
 			->append_js('jquery/jquery.cooki.js')
 			->title($this->module_details['name'])
 			->set('navigation', $navigation)
-			->set('controller', &$this)
+			->set('controller', $this)
 			->build('admin/index');
 	}
 	

@@ -79,7 +79,7 @@ class Admin extends Admin_Controller {
 			->set('folders', $this->file_folders_m->count_by('parent_id', 0))
 			->set('locations', array_combine($parts, $parts))
 			->set('folder_tree', Files::folder_tree())
-			->set('admin', &$this);
+			->set('admin', $this);
 
 		$files_path = Files::$path;
 		if (!is_really_writable($files_path))

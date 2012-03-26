@@ -140,7 +140,7 @@ class Admin extends Admin_Controller {
 			->append_css('module::index.css')
 
 			->set('pages', $this->page_m->get_page_tree())
-			->set('controller', &$this)
+			->set('controller', $this)
 			->build('admin/index');
 	}
 
@@ -378,8 +378,8 @@ class Admin extends Admin_Controller {
 			->append_metadata($this->load->view('fragments/wysiwyg', array(), true))
 
 			// Assign data for display
-			->set('page', &$page)
-			->set('parent_page', &$parent_page)
+			->set('page', $page)
+			->set('parent_page', $parent_page)
 
 			->build('admin/form');
 	}
@@ -535,8 +535,8 @@ class Admin extends Admin_Controller {
 			->append_metadata( $this->load->view('fragments/wysiwyg', array() , true) )
 			->append_css('module::page-edit.css')
 
-			->set('page', &$page)
-			->set('parent_page', &$parent_page)
+			->set('page', $page)
+			->set('parent_page', $parent_page)
 
 			->build('admin/form');
 	}

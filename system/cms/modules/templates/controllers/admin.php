@@ -3,9 +3,7 @@
  * Email Templates Admin Controller
  *
  * @author      Stephen Cozart - PyroCMS Dev Team
- * @package 	PyroCMS
- * @subpackage  Templates Module
- * @category	Module
+ * @package 	PyroCMS\Core\Modules\Templates\Controllers
  */
 class Admin extends Admin_Controller {
 
@@ -26,21 +24,19 @@ class Admin extends Admin_Controller {
         $this->lang->load('templates');
         $this->load->model('email_templates_m');
 
-        foreach($this->config->item('supported_languages') as $key => $lang)
+        foreach ($this->config->item('supported_languages') as $key => $lang)
         {
             $lang_options[$key] = $lang['name'];
         }
 
-        $this->template
-			->set('lang_options', $lang_options)
-			->set_partial('shortcuts', 'admin/partials/shortcuts');
+        $this->template->set('lang_options', $lang_options);
 
-        $base_rules = 'required|trim|xss_clean';
+        $base_rules = 'required|trim';
 
         $this->_validation_rules = array(
 			array(
 				'field' => 'name',
-				'label' => 'lang:templates.name_label',
+				'label' => 'lang:global:name',
 				'rules' => $base_rules
 			),
 			array(
@@ -50,7 +46,7 @@ class Admin extends Admin_Controller {
 			),
 			array(
 				'field' => 'description',
-				'label' => 'lang:templates.description_label',
+				'label' => 'lang:global:description',
 				'rules' => $base_rules
 			),
 			array(
@@ -134,8 +130,11 @@ class Admin extends Admin_Controller {
                 $data[$key] = $this->input->post($key);
             }
             unset($data['btnAction']);
-            if($this->email_templates_m->insert($data))
+            if ($id = $this->email_templates_m->insert($data))
             {
+                // Fire an event. A new email template has been created.
+                Events::trigger('email_template_created', $id);
+
                 $this->session->set_flashdata('success', sprintf(lang('templates.tmpl_create_success'), $data['name']));
             }
             else
@@ -197,6 +196,9 @@ class Admin extends Admin_Controller {
 
             if($this->email_templates_m->update($id, $data))
             {
+                // Fire an event. An email template has been updated.
+                Events::trigger('email_template_updated', $id);
+
                 $this->session->set_flashdata('success', sprintf(lang('templates.tmpl_edit_success'), $email_template->name));
             }
             else
@@ -251,6 +253,9 @@ class Admin extends Admin_Controller {
 			{
 				if (sizeof($ids) > 1)
 				{
+					// Fire an event. An email template has been deleted.
+					Events::trigger('email_template_deleted', $id);
+
 					$this->session->set_flashdata('success', sprintf(lang('templates.mass_delete_success'), $deleted, $to_delete));
 				}
 				else
@@ -318,13 +323,16 @@ class Admin extends Admin_Controller {
 
         $this->form_validation->set_rules($this->_clone_rules);
 
-        if($this->form_validation->run())
+        if ($this->form_validation->run())
         {
             //insert stuff to db
             $copy->lang = $this->input->post('lang');
 
-            if($new_id = $this->email_templates_m->insert($copy))
+            if ($new_id = $this->email_templates_m->insert($copy))
             {
+                // Fire the "created" event here also.
+                Events::trigger('email_template_created');
+
                 $this->session->set_flashdata('success', sprintf(lang('templates.tmpl_clone_success'), $copy->name));
                 redirect('admin/templates/edit/' . $new_id);
             }

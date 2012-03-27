@@ -1,19 +1,27 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+// This is for using the the settings
+// library in PyroCMS when installing. This is a
+// copy of the function that exists in
+// system/cms/core/My_Controller.php
+function ci()
+{
+	return get_instance();
+}
+
 /**
- * @author 		Yorick Peterse - PyroCMS development team
- * @package		PyroCMS
- * @subpackage	Installer
- * @category	Application
- * @since 		v0.9.6.2
- *
  * Installer controller.
+ * 
+ * @author 		Yorick Peterse
+ * @author		PyroCMS Dev Team
+ * @package		PyroCMS\Installer\Controllers
  */
 class Installer extends CI_Controller
 {
 	/**
 	 * Array of languages supported by the installer
 	 */
-	private $languages	= array ('arabic', 'brazilian', 'english', 'dutch', 'french', 'german', 'polish', 'chinese_traditional', 'slovenian', 'spanish', 'russian', 'greek', 'lithuanian','danish');
+	private $languages	= array ('arabic', 'brazilian', 'english', 'dutch', 'french', 'german', 'polish', 'chinese_traditional', 'slovenian', 'spanish', 'russian', 'greek', 'lithuanian','danish','vietnamese', 'indonesian', 'hungarian', 'finnish');
 
 	/**
 	 * Array containing the directories that need to be writeable
@@ -25,7 +33,8 @@ class Installer extends CI_Controller
 		'system/cms/cache',
 		'system/cms/config',
 		'addons',
-		'uploads'
+		'assets/cache',
+		'uploads',
 	);
 
 	/**
@@ -153,22 +162,32 @@ class Installer extends CI_Controller
 	}
 
 	/**
+	 *Function to validate the database name
+	 *
+	 * @access public
+	 * @return bool
+	*/
+	public function validate_mysql_db_name($db_name)
+	{
+		$this->form_validation->set_message('validate_mysql_db_name', lang('invalid_db_name'));
+		return $this->installer_lib->validate_mysql_db_name($db_name);
+	}
+
+	/**
 	 * Function to test the DB connection (used for the form validation)
 	 *
 	 * @access public
 	 * @return bool
 	 */
-	function test_db_connection()
+	public function test_db_connection()
 	{
-		if ( ! $this->installer_lib->test_db_connection() )
+		if ( ! $this->installer_lib->test_db_connection())
 		{
 			$this->form_validation->set_message('test_db_connection', lang('db_failure') . mysql_error());
-			return FALSE;
+			return false;
 		}
-		else
-		{
-			return TRUE;
-		}
+		
+		return true;
 	}
 
 	/**
@@ -186,7 +205,6 @@ class Installer extends CI_Controller
 			$this->session->set_flashdata('message', lang('step1_failure'));
 			$this->session->set_flashdata('message_type','failure');
 
-			// Redirect
 			redirect('');
 		}
 
@@ -220,6 +238,15 @@ class Installer extends CI_Controller
 
 		// Check the final results
 		$data->step_passed = $this->installer_lib->check_server($data);
+		
+		// Skip Step 2 if it passes
+		if ($data->step_passed)
+		{
+			$this->session->set_userdata('step_2_passed', true);
+			
+			redirect('installer/step_3');
+		}
+		
 		$this->session->set_userdata('step_2_passed', $data->step_passed);
 
 		// Load the view files
@@ -235,7 +262,7 @@ class Installer extends CI_Controller
 	 */
 	public function step_3()
 	{
-		if ( ! $this->session->userdata('step_1_passed') OR !$this->session->userdata('step_2_passed'))
+		if ( ! $this->session->userdata('step_1_passed') OR ! $this->session->userdata('step_2_passed'))
 		{
 			// Redirect the user back to step 1
 			redirect('installer/step_2');
@@ -258,14 +285,22 @@ class Installer extends CI_Controller
 		}
 
 		// If all permissions are TRUE, go ahead
-		$data->step_passed = !in_array(FALSE, $permissions['directories']) && !in_array(FALSE, $permissions['files']);
+		$data->step_passed = ! in_array(FALSE, $permissions['directories']) && !in_array(FALSE, $permissions['files']);
 		$this->session->set_userdata('step_3_passed', $data->step_passed);
 
+		// Skip Step 2 if it passes
+		if ($data->step_passed)
+		{
+			$this->session->set_userdata('step_3_passed', true);
+			
+			redirect('installer/step_4');
+		}
+		
 		// View variables
 		$data->permissions = $permissions;
 
 		// Load the language labels
-		$data = (object) array_merge((array) $data,$this->lang->language);
+		$data = (object) array_merge((array) $data, $this->lang->language);
 
 		// Load the view file
 		$final_data['page_output'] = $this->parser->parse('step_3', $data, TRUE);
@@ -291,7 +326,7 @@ class Installer extends CI_Controller
 			array(
 				'field' => 'database',
 				'label'	=> 'lang:database',
-				'rules'	=> 'trim|required'
+				'rules'	=> 'trim|required|callback_validate_mysql_db_name'
 			),
 			array(
 				'field' => 'site_ref',
@@ -343,11 +378,11 @@ class Installer extends CI_Controller
 			{
 				// Let's tell them why the install failed
 				$this->session->set_flashdata('message', $this->lang->line('error_'.$install['code']) . $install['message']);
-				
+
 				$final_data['page_output'] = $this->parser->parse('step_4', $this->lang->language, TRUE);
 				$this->load->view('global', $final_data);
 			}
-			
+
 			// Success!
 			$this->session->set_flashdata('message', lang('success'));
 			$this->session->set_flashdata('message_type', 'success');

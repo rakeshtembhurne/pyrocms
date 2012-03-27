@@ -15,9 +15,11 @@
 				<div class="name">
 					<p>
 					<?php if ($item->user_id): ?>
-						<?php echo anchor($item->website ? $item->website : 'user/'.$item->user_id, $this->ion_auth->get_user($item->user_id)->display_name); ?>
+						<?php echo anchor($item->website ? $item->website : 'user/'.$item->user_id, 
+											$this->ion_auth->get_user($item->user_id)->display_name, 
+											$item->website ? 'rel="external nofollow"' : ''); ?>
 					<?php else: ?>
-						<?php echo $item->website ? anchor($item->website, $item->name) : $item->name; ?>
+						<?php echo $item->website ? anchor($item->website, $item->name, 'rel="external nofollow"') : $item->name; ?>
 					<?php endif; ?>
 					</p>
 				</div>
@@ -50,7 +52,7 @@
 			<?php echo form_hidden('redirect_to', uri_string()); ?>
 			<noscript><?php echo form_input('d0ntf1llth1s1n', '', 'style="display:none"'); ?></noscript>
 
-			<?php if ( ! $this->current_user): ?>
+			<?php if ( ! $current_user): ?>
 
 			<div class="form_name">
 				<label for="name"><?php echo lang('comments.name_label'); ?>:</label>

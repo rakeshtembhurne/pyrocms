@@ -1,8 +1,25 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Code here is run before admin controllers
+/**
+ * This is the basis for the Admin class that is used throughout PyroCMS.
+ * 
+ * Code here is run before admin controllers
+ * 
+ * @package PyroCMS\Core\Controllers
+ */
 class Admin_Controller extends MY_Controller {
 
+	/**
+	 * Admin controllers can have sections, normally an arbitrary string
+	 *
+	 * @var string 
+	 */
+	protected $section = NULL;
+
+	/**
+	 * Load language, check flashdata, define https, load and setup the data 
+	 * for the admin theme
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,18 +31,19 @@ class Admin_Controller extends MY_Controller {
 		// Show error and exit if the user does not have sufficient permissions
 		if ( ! self::_check_access())
 		{
-			show_error(lang('cp_access_denied'));
+			$this->session->set_flashdata('error', lang('cp_access_denied'));
+			redirect();
 		}
 
 		// If the setting is enabled redirect request to HTTPS
-		if ($this->settings->admin_force_https and $_SERVER['SERVER_PORT'] != 443)
+		if ($this->settings->admin_force_https and strtolower(substr(current_url(), 4, 1)) != 's')
 		{
 			redirect(str_replace('http:', 'https:', current_url()).'?session='.session_id());
 		}
 
 		$this->load->helper('admin_theme');
 		
-		$this->admin_theme = $this->themes_m->get_admin();
+		ci()->admin_theme = $this->theme_m->get_admin();
 		
 		// Using a bad slug? Weak
 		if (empty($this->admin_theme->slug))
@@ -34,34 +52,35 @@ class Admin_Controller extends MY_Controller {
 		}
 
 		// make a constant as this is used in a lot of places
-		define('ADMIN_THEME', $this->admin_theme->slug);
+		defined('ADMIN_THEME') or define('ADMIN_THEME', $this->admin_theme->slug);
 			
-		// Prepare Asset library
-	    $this->asset->set_theme(ADMIN_THEME);
-	
-		// Set the front-end theme directory
-		$this->config->set_item('asset_dir', dirname($this->admin_theme->web_path).'/');
-		$this->config->set_item('asset_url', BASE_URL.dirname($this->admin_theme->web_path).'/');
-		$this->config->set_item('theme_asset_dir', dirname($this->admin_theme->web_path).'/');
-		$this->config->set_item('theme_asset_url', BASE_URL.dirname($this->admin_theme->web_path).'/');
+		// Set the location of assets
+		Asset::add_path('theme', $this->admin_theme->web_path.'/');
+		Asset::set_path('theme');
 		
 		// grab the theme options if there are any
-		$this->theme_options = $this->pyrocache->model('themes_m', 'get_values_by', array( array('theme' => ADMIN_THEME) ));
+		ci()->theme_options = $this->pyrocache->model('theme_m', 'get_values_by', array(array('theme' => ADMIN_THEME) ));
 	
+		// Active Admin Section (might be null, but who cares)
+		$this->template->active_section = $this->section;
+		
 		// Template configuration
 		$this->template
-				->enable_parser(FALSE)
-				->set('theme_options', $this->theme_options)
-				->set_theme(ADMIN_THEME)
-				->set_layout('default', 'admin');
+			->enable_parser(FALSE)
+			->set('theme_options', $this->theme_options)
+			->set_theme(ADMIN_THEME)
+			->set_layout('default', 'admin');
 
 		// trigger the run() method in the selected admin theme
 		$class = 'Theme_'.ucfirst($this->admin_theme->slug);
 		call_user_func(array(new $class, 'run'));
-
-//	    $this->output->enable_profiler(TRUE);
 	}
 
+	/**
+	 * Checks to see if a user object has access rights to the admin area.
+	 *
+	 * @return boolean 
+	 */
 	private function _check_access()
 	{
 		// These pages get past permission checks

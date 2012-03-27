@@ -1,12 +1,9 @@
 <?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * @author 		Phil Sturgeon - PyroCMS development team
+ * @author 		Phil Sturgeon
  * @author 		Victor Michnowicz
- * @package 	PyroCMS
- * @subpackage 	Installer
- *
- * @since 		v0.9.8
- *
+ * @author		PyroCMS Dev Team
+ * @package 	PyroCMS\Installer\Libraries
  */
 class Installer_lib {
 
@@ -181,6 +178,17 @@ class Installer_lib {
 	}
 
 	/**
+	 * @return bool
+	 * Make sure the database name is a valid mysql identifier
+	 * 
+	 */
+	 public function validate_mysql_db_name($db_name)
+	 {
+	 	$expr = '/[^A-Za-z0-9_-]+/';
+	 	return !(preg_match($expr,$db_name)>0);
+	 }
+
+	/**
 	 * @return 	mixed
 	 *
 	 * Make sure we can connect to the database
@@ -233,6 +241,11 @@ class Installer_lib {
 		if ( ! $this->db = mysql_connect($server, $username, $password) )
 		{
 			return array('status' => FALSE,'message' => 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.');
+		}
+		
+		if ($this->mysql_server_version >= '5.0.7')
+		{
+			@mysql_set_charset('utf8', $this->db);
 		}
 
 		// Do we want to create the database using the installer ?

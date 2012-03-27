@@ -1,32 +1,30 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
 /**
- *
- * @package  	PyroCMS
- * @subpackage  Categories
- * @category  	Module
+ * 
+ * @author 		PyroCMS Dev Team
+ * @package 	PyroCMS\Core\Modules\Blog\Controllers
  */
-class Admin extends Admin_Controller {
-
+class Admin extends Admin_Controller
+{
 	/**
-	 * The id of post
-	 * @access protected
-	 * @var int
+	 * The current active section
+	 *
+	 * @var string
 	 */
-	protected $id = 0;
+	protected $section = 'posts';
 
 	/**
 	 * Array that contains the validation rules
-	 * @access protected
+	 *
 	 * @var array
 	 */
 	protected $validation_rules = array(
-		array(
+		'title' => array(
 			'field' => 'title',
 			'label' => 'lang:blog_title_label',
 			'rules' => 'trim|htmlspecialchars|required|max_length[100]|callback__check_title'
 		),
-		array(
+		'slug' => array(
 			'field' => 'slug',
 			'label' => 'lang:blog_slug_label',
 			'rules' => 'trim|required|alpha_dot_dash|max_length[100]|callback__check_slug'
@@ -84,32 +82,31 @@ class Admin extends Admin_Controller {
 
 	/**
 	 * The constructor
-	 * @access public
-	 * @return void
 	 */
 	public function __construct()
 	{
 		parent::__construct();
-
+		
 		$this->load->model(array('blog_m', 'blog_categories_m'));
 		$this->lang->load(array('blog', 'categories'));
 		
 		$this->load->library(array('keywords/keywords', 'form_validation'));
 
 		// Date ranges for select boxes
-		$this->data->hours = array_combine($hours = range(0, 23), $hours);
-		$this->data->minutes = array_combine($minutes = range(0, 59), $minutes);
+		$this->template
+			->set('hours', array_combine($hours = range(0, 23), $hours))
+			->set('minutes', array_combine($minutes = range(0, 59), $minutes))
+		;
 
-		$this->data->categories = array();
+		$_categories = array();
 		if ($categories = $this->blog_categories_m->order_by('title')->get_all())
 		{
 			foreach ($categories as $category)
 			{
-				$this->data->categories[$category->id] = $category->title;
+				$_categories[$category->id] = $category->title;
 			}
 		}
-
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
+		$this->template->set('categories', $_categories);
 	}
 
 	/**
@@ -136,26 +133,24 @@ class Admin extends Admin_Controller {
 		// Using this data, get the relevant results
 		$blog = $this->blog_m->limit($pagination['limit'])->get_many_by($base_where);
 
-		foreach ($blog as &$post)
-		{
-			$post->author = $this->ion_auth->get_user($post->author_id);
-		}
-
 		//do we need to unset the layout because the request is ajax?
 		$this->input->is_ajax_request() ? $this->template->set_layout(FALSE) : '';
 
 		$this->template
 			->title($this->module_details['name'])
-			->set_partial('filters', 'admin/partials/filters')
-			->append_metadata(js('admin/filter.js'))
+			->append_js('admin/filter.js')
 			->set('pagination', $pagination)
-			->set('blog', $blog)
-			->build('admin/index', $this->data);
+			->set('blog', $blog);
+
+		$this->input->is_ajax_request()
+			? $this->template->build('admin/tables/posts')
+			: $this->template->build('admin/index');
+
 	}
 
 	/**
 	 * Create new post
-	 * @access public
+	 *
 	 * @return void
 	 */
 	public function create()
@@ -180,7 +175,7 @@ class Admin extends Admin_Controller {
 				role_or_die('blog', 'put_live');
 			}
 
-			$id = $this->blog_m->insert(array(
+			if ($id = $this->blog_m->insert(array(
 				'title'				=> $this->input->post('title'),
 				'slug'				=> $this->input->post('slug'),
 				'category_id'		=> $this->input->post('category_id'),
@@ -192,13 +187,18 @@ class Admin extends Admin_Controller {
 				'comments_enabled'	=> $this->input->post('comments_enabled'),
 				'author_id'			=> $this->current_user->id,
 				'type'				=> $this->input->post('type'),
-				'parsed'			=> ($this->input->post('type') == 'markdown') ? parse_markdown($this->input->post('body')) : ''
-			));
-
-			if ($id)
+				'parsed'			=> ($this->input->post('type') == 'markdown') ? parse_markdown($this->input->post('body')) : '',
+			)))
 			{
 				$this->pyrocache->delete_all('blog_m');
 				$this->session->set_flashdata('success', sprintf($this->lang->line('blog_post_add_success'), $this->input->post('title')));
+				
+				// They are trying to put this live
+				if ($this->input->post('status') == 'live')
+				{
+					// Fire an event, we're posting a new blog!
+					Events::trigger('blog_article_published', $id);
+				}
 			}
 			else
 			{
@@ -223,7 +223,9 @@ class Admin extends Admin_Controller {
 		$this->template
 			->title($this->module_details['name'], lang('blog_create_title'))
 			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
-			->append_metadata(js('blog_form.js', 'blog'))
+			->append_js('jquery/jquery.tagsinput.js')
+			->append_js('module::blog_form.js')
+			->append_css('jquery/jquery.tagsinput.css')
 			->set('post', $post)
 			->build('admin/form');
 	}
@@ -239,10 +241,7 @@ class Admin extends Admin_Controller {
 	{
 		$id OR redirect('admin/blog');
 
-		$this->form_validation->set_rules($this->validation_rules);
-
 		$post = $this->blog_m->get($id);
-		$post->author = $this->ion_auth->get_user($post->author_id);
 		$post->keywords = Keywords::get_string($post->keywords);
 
 		// If we have a useful date, use it
@@ -255,8 +254,19 @@ class Admin extends Admin_Controller {
 		{
 			$created_on = $post->created_on;
 		}
-
-		$this->id = $post->id;
+		
+		$this->form_validation->set_rules(array_merge($this->validation_rules, array(
+			'title' => array(
+				'field' => 'title',
+				'label' => 'lang:blog_title_label',
+				'rules' => 'trim|htmlspecialchars|required|max_length[100]|callback__check_title['.$id.']'
+			),
+			'slug' => array(
+				'field' => 'slug',
+				'label' => 'lang:blog_slug_label',
+				'rules' => 'trim|required|alpha_dot_dash|max_length[100]|callback__check_slug['.$id.']'
+			),
+		)));
 		
 		if ($this->form_validation->run())
 		{
@@ -266,7 +276,7 @@ class Admin extends Admin_Controller {
 				role_or_die('blog', 'put_live');
 			}
 
-			$author_id = empty($post->author) ? $this->current_user->id : $post->author_id;
+			$author_id = empty($post->display_name) ? $this->current_user->id : $post->author_id;
 
 			$result = $this->blog_m->update($id, array(
 				'title'				=> $this->input->post('title'),
@@ -287,16 +297,12 @@ class Admin extends Admin_Controller {
 			{
 				$this->session->set_flashdata(array('success' => sprintf(lang('blog_edit_success'), $this->input->post('title'))));
 
-				// The twitter module is here, and enabled!
-//				if ($this->settings->item('twitter_blog') == 1 && ($post->status != 'live' && $this->input->post('status') == 'live'))
-//				{
-//					$url = shorten_url('blog/'.$date[2].'/'.str_pad($date[1], 2, '0', STR_PAD_LEFT).'/'.url_title($this->input->post('title')));
-//					$this->load->model('twitter/twitter_m');
-//					if ( ! $this->twitter_m->update(sprintf($this->lang->line('blog_twitter_posted'), $this->input->post('title'), $url)))
-//					{
-//						$this->session->set_flashdata('error', lang('blog_twitter_error') . ": " . $this->twitter->last_error['error']);
-//					}
-//				}
+				// They are trying to put this live
+				if ($post->status != 'live' and $this->input->post('status') == 'live')
+				{
+					// Fire an event, we're posting a new blog!
+					Events::trigger('blog_article_published', $id);
+				}
 			}
 			
 			else
@@ -309,23 +315,24 @@ class Admin extends Admin_Controller {
 		}
 
 		// Go through all the known fields and get the post values
-		foreach (array_keys($this->validation_rules) as $field)
+		foreach ($this->validation_rules as $key => $field)
 		{
-			if (isset($_POST[$field]))
+			if (isset($_POST[$field['field']]))
 			{
-				$post->$field = $this->form_validation->$field;
+				$post->$field['field'] = set_value($field['field']);
 			}
 		}
 
 		$post->created_on = $created_on;
 		
-		// Load WYSIWYG editor
 		$this->template
-				->title($this->module_details['name'], sprintf(lang('blog_edit_title'), $post->title))
-				->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
-				->append_metadata(js('blog_form.js', 'blog'))
-				->set('post', $post)
-				->build('admin/form');
+			->title($this->module_details['name'], sprintf(lang('blog_edit_title'), $post->title))
+			->append_metadata($this->load->view('fragments/wysiwyg', $this->data, TRUE))
+			->append_js('jquery/jquery.tagsinput.js')
+			->append_js('module::blog_form.js')
+			->append_css('jquery/jquery.tagsinput.css')
+			->set('post', $post)
+			->build('admin/form');
 	}
 
 	/**
@@ -354,18 +361,16 @@ class Admin extends Admin_Controller {
 		switch ($this->input->post('btnAction'))
 		{
 			case 'publish':
-				role_or_die('blog', 'put_live');
 				$this->publish();
-				break;
+			break;
 			
 			case 'delete':
-				role_or_die('blog', 'delete_live');
 				$this->delete();
-				break;
+			break;
 			
 			default:
 				redirect('admin/blog');
-				break;
+			break;
 		}
 	}
 
@@ -431,6 +436,8 @@ class Admin extends Admin_Controller {
 	 */
 	public function delete($id = 0)
 	{
+		role_or_die('blog', 'delete_live');
+
 		// Delete one
 		$ids = ($id) ? array($id) : $this->input->post('action_to');
 
@@ -438,18 +445,24 @@ class Admin extends Admin_Controller {
 		if ( ! empty($ids))
 		{
 			$post_titles = array();
+			$deleted_ids = array();
 			foreach ($ids as $id)
 			{
 				// Get the current page so we can grab the id too
 				if ($post = $this->blog_m->get($id))
 				{
-					$this->blog_m->delete($id);
-
-					// Wipe cache for this model, the content has changed
-					$this->pyrocache->delete('blog_m');
-					$post_titles[] = $post->title;
+					if ($this->blog_m->delete($id))
+					{
+						// Wipe cache for this model, the content has changed
+						$this->pyrocache->delete('blog_m');
+						$post_titles[] = $post->title;
+						$deleted_ids[] = $id;
+					}
 				}
 			}
+			
+			// Fire an event. We've deleted one or more blog posts.
+			Events::trigger('blog_article_deleted', $deleted_ids);
 		}
 
 		// Some pages have been deleted
@@ -481,15 +494,10 @@ class Admin extends Admin_Controller {
 	 * @param string title The Title to check
 	 * @return bool
 	 */
-	public function _check_title($title = '')
+	public function _check_title($title, $id = null)
 	{
-		if ( ! $this->blog_m->check_exists('title', $title, $this->id))
-		{
-			$this->form_validation->set_message('_check_title', sprintf(lang('blog_already_exist_error'), lang('blog_title_label')));
-			return FALSE;
-		}
-		
-		return TRUE;
+		$this->form_validation->set_message('_check_title', sprintf(lang('blog_already_exist_error'), lang('blog_title_label')));
+		return $this->blog_m->check_exists('title', $title, $id);			
 	}
 	
 	/**
@@ -498,15 +506,10 @@ class Admin extends Admin_Controller {
 	 * @param string slug The Slug to check
 	 * @return bool
 	 */
-	public function _check_slug($slug = '')
+	public function _check_slug($slug, $id = null)
 	{
-		if ( ! $this->blog_m->check_exists('slug', $slug, $this->id))
-		{
-			$this->form_validation->set_message('_check_slug', sprintf(lang('blog_already_exist_error'), lang('blog_slug_label')));
-			return FALSE;
-		}
-
-		return TRUE;
+		$this->form_validation->set_message('_check_slug', sprintf(lang('blog_already_exist_error'), lang('blog_slug_label')));
+		return $this->blog_m->check_exists('slug', $slug, $id);
 	}
 
 	/**
@@ -541,8 +544,8 @@ class Admin extends Admin_Controller {
 
 		//set the layout to false and load the view
 		$this->template
-				->set_layout(FALSE)
-				->set('blog', $results)
-				->build('admin/index');
+			->set_layout(FALSE)
+			->set('blog', $results)
+			->build('admin/tables/posts');
 	}
 }

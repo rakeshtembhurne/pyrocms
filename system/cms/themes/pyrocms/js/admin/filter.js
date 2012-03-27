@@ -1,7 +1,7 @@
 (function($){$(function(){
 
 	pyro.filter = {
-		$content		: $('#content-body'),
+		$content		: $('#filter-stage'),
 		// filter form object
 		$filter_form	: $('#filters form'),
 
@@ -94,9 +94,7 @@
 					}
 
 					//success stuff here
-					// Chosen
-					$('select').addClass('chzn');
-					$(".chzn").chosen();
+					pyro.chosen();
 					pyro.filter.$content.html(html).fadeIn('fast');
 				});
 			});

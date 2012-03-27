@@ -15,7 +15,6 @@ $lang['pages.add_page_chunk']						= 'Voeg paginadeel toe';
 $lang['pages.page_chunk']							= 'Paginadeel';
 $lang['pages.language_label'] 					= 'Taal';
 $lang['pages.updated_label'] 					= 'Bijgewerkt';
-$lang['pages.actions_label'] 					= 'Acties';
 $lang['pages.unknown_label'] 					= 'Onbekend';
 $lang['pages.title_label'] 						= 'Titel';
 $lang['pages.slug_label'] 						= 'URL';
@@ -31,6 +30,7 @@ $lang['pages.access_label'] 					= 'Toegang';
 $lang['pages.rss_enabled_label'] 				= 'RSS ingeschakeld';
 $lang['pages.comments_enabled_label'] 			= 'Commentaren ingeschakeld';
 $lang['pages.is_home_label']      = 'Is standaard (home) pagina?';
+$lang['pages.strict_uri_label']						= 'Require an exact uri match?'; #translate
 
 $lang['pages.status_label'] 					= 'Status';
 $lang['pages.draft_label'] 						= 'Concept';
@@ -42,9 +42,7 @@ $lang['pages.current_label']					= 'Huidig';
 
 $lang['pages.view_label']						= 'Bekijk';
 $lang['pages.create_label'] 					= 'Voeg kind toe';
-$lang['pages.edit_label']						= 'Wijzig';
 $lang['pages.duplicate_label']					= 'Dupliceer';
-$lang['pages.delete_label'] 					= 'Verwijder';
 
 // titles
 $lang['pages.create_title'] 					= 'Voeg pagina toe';
@@ -65,8 +63,10 @@ $lang['pages_mass_delete_success'] 				= '%s pagina&apos;s zijn verwijderd.';
 $lang['pages_delete_none_notice'] 				= 'Er zijn geen pagina&apos;s verwijderd.';
 $lang['pages_page_already_exist_error'] 		= 'De pagina met URL "%s" bestaat al in %s.';
 $lang['pages_parent_not_exist_error'] 			= 'De geselecteerde bovenliggende pagina bestaat niet.';
+$lang['pages_chunk_slug_length']					= 'Page Chunk slugs may be no more than 30 characters in length.'; #translate
 $lang['pages_root_folder']                = 'the top level'; #translate
 
+$lang['pages.tree_explanation_title']	        = 'Explanation'; #translate
 $lang['pages.tree_explanation'] 				= 'De lijst aan de linkerkant stellen de pagina&apos;s op uw website voor.
 Klik op het "+" icoon naast de pagina om de onderliggende pagina&apos;s te zien. Als u een pagina selecteert ziet u de informatie over de pagina in dit veld.';
 

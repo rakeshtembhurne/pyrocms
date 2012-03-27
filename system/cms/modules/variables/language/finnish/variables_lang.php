@@ -2,20 +2,12 @@
 /**
  * Finnish translation.
  *
- * @author		Mikael Kundert <mikael@kundert.fi>
- * @package		PyroCMS
- * @subpackage 	Variables Module
- * @category	Modules
- * @link		http://pyrocms.com
- * @date		2011-03-13
- * @version		1.1.0
+ * @author Mikael Kundert
  */
 
 // labels
-$lang['variables.name_label'] 			    = 'Nimi';
 $lang['variables.syntax_label']				= 'Syntaksi';
 $lang['variables.data_label'] 			    = 'Arvo';
-$lang['variables.actions_label'] 			= 'Toiminnot';
 
 // titles
 $lang['variables.create_title'] 			= 'Lisää muuttuja';

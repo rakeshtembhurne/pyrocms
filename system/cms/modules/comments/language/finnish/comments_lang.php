@@ -2,9 +2,7 @@
 /**
  * Finnish translation.
  *
- * @author Mikael Kundert <mikael@kundert.fi>
- * @date 07.02.2011
- * @version 1.0.3
+ * @author Mikael Kundert
  */
 
 $lang['comments.title'] 					= 'Kommentit';
@@ -23,13 +21,9 @@ $lang['comments.message_label'] 			= 'Viesti';
 $lang['comments.status_label'] 				= 'Status';
 $lang['comments.activate_label'] 			= 'Hyväksy';
 $lang['comments.deactivate_label'] 			= 'Hylkää';
-$lang['comments.author_label'] 				= 'Kirjoittaja';
 $lang['comments.module_label'] 				= 'Moduuli';
 $lang['comments.item_label'] 				= 'Item'; // @todo In which context?
 $lang['comments.date_label'] 				= 'Päivä';
-$lang['comments.actions_label'] 			= 'Toiminnot';
-$lang['comments.edit_label'] 				= 'Muokkaa';
-$lang['comments.delete_label'] 				= 'Poista';
 $lang['comments.posted_label'] 				= 'Lähetetty';
 $lang['comments.from_label'] 				= 'Käyttäjältä';
 $lang['comments.preview_label'] 			= 'Esikatsele';
@@ -65,7 +59,7 @@ $lang['comments.no_comments'] 				= 'Ei kommentteja';
 
 // Helper counter comments
 $lang['comments.counter_none_label']		= 'No comment'; #translate
-$lang['comments.counter_singular_label']	= '%d comment'; #translate
-$lang['comments.counter_plural_label']		= '%d comments'; #translate
+$lang['comments.counter_singular_label']	= '%d kommentti';
+$lang['comments.counter_plural_label']		= '%d kommenttia';
 
 /* End of file comments_lang.php */

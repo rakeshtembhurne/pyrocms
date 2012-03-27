@@ -1,13 +1,17 @@
 (function($) {
 	$(function(){
-
-		form = $('form.crud');
 		
-		$('input[name="title"]', form).keyup($.debounce(350, function(e){
-			$.post(SITE_URL + 'ajax/url_title', { title : $(this).val() }, function(slug){
-				$('input[name="slug"]', form).val( slug );
-			});
-		}));
+		// generate a slug when the user types a title in
+		pyro.generate_slug('#blog-content-tab input[name="title"]', 'input[name="slug"]');
+		
+		// needed so that Keywords can return empty JSON
+		$.ajaxSetup({
+			allowEmpty: true
+		});
+
+		$('#keywords').tagsInput({
+			autocomplete_url:'admin/keywords/autocomplete'
+		});
 		
 		// editor switcher
 		$('select[name^=type]').live('change', function() {

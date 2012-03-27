@@ -15,7 +15,6 @@ $lang['pages.add_page_chunk']			= 'Add Page Chunk'; #translate
 $lang['pages.page_chunk']				= 'Page Chunk'; #translate
 $lang['pages.language_label'] 			= 'Lenguaje';
 $lang['pages.updated_label'] 			= 'Actualizado';
-$lang['pages.actions_label'] 			= 'Acciones';
 $lang['pages.unknown_label'] 			= 'Desconocido';
 $lang['pages.title_label'] 				= 'Título';
 $lang['pages.slug_label'] 				= 'URL';
@@ -31,6 +30,7 @@ $lang['pages.access_label']				= 'Acceder';
 $lang['pages.rss_enabled_label']		= 'RSS habilitado';
 $lang['pages.comments_enabled_label']	= 'Comentarios habilitados';
 $lang['pages.is_home_label']			= 'Es la página pricipal? (Homepage)';
+$lang['pages.strict_uri_label']			= 'Require an exact uri match?'; #translate
 
 $lang['pages.status_label']				= 'Estado';
 $lang['pages.draft_label'] 				= 'Borrador';
@@ -40,9 +40,7 @@ $lang['pages.current_label']			= 'Actual';
 
 $lang['pages.view_label'] 				= 'Ver';
 $lang['pages.create_label'] 			= 'Añadir página hija';
-$lang['pages.edit_label'] 				= 'Editar';
-$lang['pages.duplicate_label']					= 'Duplicate'; #translate
-$lang['pages.delete_label'] 			= 'Borrar';
+$lang['pages.duplicate_label']			= 'Duplicate'; #translate
 
 # titles
 $lang['pages.create_title']				= 'Crear página';
@@ -63,8 +61,10 @@ $lang['pages_mass_delete_success']	 	= '%s páginas han sido eliminadas.';
 $lang['pages_delete_none_notice'] 		= 'No se ha borado ninguna página.';
 $lang['pages_page_already_exist_error'] = 'Una página con el URL "%s" ya existe en %s.';
 $lang['pages_parent_not_exist_error'] 	= 'La página padre que has seleccionado no existe.';
+$lang['pages_chunk_slug_length']					= 'Page Chunk slugs may be no more than 30 characters in length.'; #translate
 $lang['pages_root_folder']                = 'the top level'; #translate
 
+$lang['pages.tree_explanation_title']	        = 'Explanation'; #translate
 $lang['pages.tree_explanation'] 		= 'La lista a la izquierda representa las páginas en tu sitio.
 Has click en el icono de "+" a un lado de la página para mostrar las páginas dentro de ella. Al hacer click en una página verás toda clase de información útil en está caja.';
 

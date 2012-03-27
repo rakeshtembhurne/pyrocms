@@ -2,13 +2,21 @@
 
 	$(function() {
 
-		// show the first box with js to get around page jump
-		$('.box .item:first').slideDown(600).removeClass('collapsed');
-
+		var open_sections = $.cookie('nav_groups');
+		
+		if (open_sections) {
+			$('section[rel="'+open_sections+'"] .item').slideDown(600).removeClass('collapsed');
+		} else {
+			// show the first box with js to get around page jump
+			$('.box .item:first').slideDown(600).removeClass('collapsed');			
+		}
+		
 		// show and hide the sections
 		$('.box .title').click(function(){
+			window.scrollTo(0, 0);
 			if ($(this).next('section.item').hasClass('collapsed')) {
 				$('.box .item').slideUp(600).addClass('collapsed');
+				$.cookie('nav_groups', $(this).parent('.box').attr('rel'), { expires: 1 });
 				$(this).next('section.collapsed').slideDown(600).removeClass('collapsed');
 			}
 		});
@@ -28,9 +36,8 @@
 				var title = $('#title-value-'+id).html();
 				$('section.box .title h4.group-title-'+id).html(title);
 				
-				// Chosen
-				$('select').addClass('chzn');
-				$(".chzn").chosen();
+				// Update Chosen
+				pyro.chosen();
 			});
 			return false;
 		});
@@ -46,7 +53,7 @@
 				}
 				else {
 					$('.notification').remove();
-					$('nav#shortcuts').after(message);
+					$('div#content-body').prepend(message);
 					// Fade in the notifications
 					$(".notification").fadeIn("slow");
 				}
@@ -64,7 +71,7 @@
 				}
 				else {
 					$('.notification').remove();
-					$('nav#shortcuts').after(message);
+					$('div#content-body').prepend(message);
 					// Fade in the notifications
 					$(".notification").fadeIn("slow");
 				}
@@ -86,7 +93,7 @@
 		}).filter(':checked').change();
 
 		// show link details
-		$('#link-list li a').live('click', function()
+		$('#link-list li a').livequery('click', function()
 		{
 			var id = $(this).attr('rel');
 			link_id = $(this).attr('alt');
@@ -99,80 +106,21 @@
 			});
 			return false;
 		});
-
-		// collapse all ordered lists but the top level
-		$('#link-list ol:not(.sortable)').children().hide();
-
-		//this gets ran again after drop
-		var update_tree = function() {
-
-			// add the minus icon to all parent items that now have visible children
-			$('#link-list ol').children('li:has(li:visible)').removeClass().addClass('minus');
-
-			// add the plus icon to all parent items with hidden children
-			$('#link-list ol').children('li:has(li:hidden)').removeClass().addClass('plus');
-
-			// remove the class if the child was removed
-			$('#link-list ol').children('li:not(:has(ol))').removeClass();
-
-			// refresh the link details pane if it exists
-			if($('#link-details #link-id').val() > 0)
-			{
-				// Load the details box in
-				$('div#link-details').load(SITE_URL + 'admin/navigation/ajax_link_details/' + $('#link-details #link-id').val());
+		
+		$('.box:visible ul.sortable').livequery(function(){
+			$item_list		= $(this);
+			$url			= 'admin/navigation/order';
+			$cookie			= 'open_links';
+			$data_callback	= function(event, ui) {
+				// Grab the group id so we can update the right links
+				return { 'group' : ui.item.parents('section.box').attr('rel') };
 			}
-		}
-		update_tree();
-
-		// set the icons properly on parents restored from cookie
-		$($.cookie('open_links')).has('ol').toggleClass('minus plus');
-
-		// show the parents that were open on last visit
-		$($.cookie('open_links')).children('ol').children().show();
-
-		// show/hide the children when clicking on an <li>
-		$('#link-list li').live('click', function()
-		{
-			$(this).children('ol').children().slideToggle('fast');
-
-			$(this).has('ol').toggleClass('minus plus');
-
-			var links = [];
-
-			// get all of the open parents
-			$('.item').find('li.minus').each(function(){ links.push('#' + this.id) });
-
-			// save open parents in the cookie
-			$.cookie('open_links', links.join(', '), { expires: 1 });
-
-			 return false;
+			// $post_callback is available but not needed here
+			
+			// Get sortified
+			pyro.sort_tree($item_list, $url, $cookie, $data_callback);
 		});
 
-		$('ol.sortable').nestedSortable({
-			disableNesting: 'no-nest',
-			forcePlaceholderSize: true,
-			handle: 'div',
-			helper:	'clone',
-			items: 'li',
-			opacity: .4,
-			placeholder: 'placeholder',
-			tabSize: 25,
-			tolerance: 'pointer',
-			toleranceElement: '> div',
-			stop: function(event, ui) {
-				// create the array using the toHierarchy method
-				order = $(this).nestedSortable('toHierarchy');
-
-				// get the group id
-				var group = $(this).parents('section.box').attr('rel');
-
-				// refresh the tree icons - needs a timeout to allow nestedSort
-				// to remove unused elements before we check for their existence
-				setTimeout(update_tree, 5);
-
-				$.post(SITE_URL + 'admin/navigation/order', { 'order': order, 'group': group } );
-			}
-		});
 	});
 
 })(jQuery);

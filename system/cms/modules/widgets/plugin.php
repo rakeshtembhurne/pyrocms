@@ -2,12 +2,10 @@
 /**
  * Widgets Plugin
  *
- * Load widget instances and asrea
+ * Load widget instances and area
  *
- * @package		PyroCMS
  * @author		PyroCMS Dev Team
- * @copyright	Copyright (c) 2008 - 2011, PyroCMS
- *
+ * @package		PyroCMS\Core\Modules\Widgets\Plugins
  */
 class Plugin_Widgets extends Plugin
 {
@@ -22,7 +20,7 @@ class Plugin_Widgets extends Plugin
 	 * Display all widgets in a widget area
 	 *
 	 * Usage:
-	 * {pyro:widgets:area slug="sidebar"}
+	 * {{ widgets:area slug="sidebar" }}
 	 *
 	 * @param	array
 	 * @return	array
@@ -43,7 +41,7 @@ class Plugin_Widgets extends Plugin
 	 * Show one specific widget instance
 	 *
 	 * Usage:
-	 * {pyro:widgets:instance id="8"}
+	 * {{ widgets:instance id="8" }}
 	 *
 	 * @param	array
 	 * @return	array

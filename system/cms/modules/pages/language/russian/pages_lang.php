@@ -23,7 +23,6 @@ $lang['pages.add_page_chunk']						= 'Добавить кусок страниц
 $lang['pages.page_chunk']								= 'Кусок страницы';
 $lang['pages.language_label']						= 'Язык';
 $lang['pages.updated_label']						= 'Обновлено';
-$lang['pages.actions_label']						= 'Действия';
 $lang['pages.unknown_label']						= 'Неизвестно';
 $lang['pages.title_label']							= 'Заголовок';
 $lang['pages.slug_label']								= 'URL';
@@ -39,6 +38,7 @@ $lang['pages.access_label']							= 'Доступ';
 $lang['pages.rss_enabled_label']				= 'Включить RSS';
 $lang['pages.comments_enabled_label']		= 'Разрешить комментарии';
 $lang['pages.is_home_label']						= 'Это страница по-умолчанию (главная)?';
+$lang['pages.strict_uri_label']						= 'Require an exact uri match?'; #translate
 
 $lang['pages.status_label']							= 'Статус';
 $lang['pages.draft_label']							= 'Черновик';
@@ -49,8 +49,6 @@ $lang['pages.current_label']						= 'Текущая версия';
 $lang['pages.view_label']								= 'Просмотр';
 $lang['pages.create_label']							= 'Создать потомка';
 $lang['pages.duplicate_label']					= 'Duplicate'; #translate
-$lang['pages.edit_label']								= 'Редактировать';
-$lang['pages.delete_label']							= 'Удалить';
 
 // заголовки
 $lang['pages.create_title']							= 'Создать страницу';
@@ -71,8 +69,10 @@ $lang['pages_mass_delete_success']			= '%s страницы удалены.';
 $lang['pages_delete_none_notice']				= 'Ни одной страницы не удалено.';
 $lang['pages_page_already_exist_error']	= 'Страница с адресом "%s" уже существует в %s.';
 $lang['pages_parent_not_exist_error']		= 'Выбранная родительская страница не существует.';
+$lang['pages_chunk_slug_length']					= 'Page Chunk slugs may be no more than 30 characters in length.'; #translate
 $lang['pages_root_folder']                = 'the top level'; #translate
 
+$lang['pages.tree_explanation_title']	        = 'Explanation'; #translate
 $lang['pages.tree_explanation']					= 'Список слева содержит все страницы вашего сайта. Нажмите знак "+" для отображения потомков выбранной страницы. При нажатии на страницу - в этом блоке будет выведена полезная информация.';
 
 $lang['pages.rss_explanation']					= 'При активировании RSS для этой страницы у пользователей появится возможность подписаться на все страницы-потомки, добавляемые к этой странице.';

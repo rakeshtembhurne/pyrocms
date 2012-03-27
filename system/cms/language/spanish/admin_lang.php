@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 $lang['cp_admin_title']			= 'Panel de Control';
-$lang['cp_admin_home_title']		= 'Tablero';
+$lang['global:dashboard']		= 'Tablero';
 $lang['cp_admin_quick_links']		= 'Enlaces Rápidos';
 
 $lang['cp_welcome_title']		= 'Bienvenido';
@@ -25,7 +25,7 @@ $lang['cp_edit_profile_label']	= 'Editar perfil';
 // Footer
 $lang['cp_change_language']		= 'Cambiar idioma';
 $lang['cp_documentation']		= 'Documentación';
-$lang['cp_report_bug']			= 'Reportar un bug';
+$lang['cp_report_bug']			= 'Avisar de un bug';
 $lang['cp_contact_support']		= 'Soporte';
 
 $lang['cp_nav_settings']		= 'Configuraciones';

@@ -25,15 +25,9 @@ $lang['widgets.widget_area']            = 'Področje';
 $lang['widgets.widget_area_title']      = 'Ime področja';
 $lang['widgets.widget_area_slug']       = 'Kratko ime področja';
 
-// Widget instance titles
-$lang['widgets.add_instance']           = 'Dodaj primer vtičnika';
-$lang['widgets.edit_instance']          = 'Uredi primer vtičnika';
-$lang['widgets.delete_instance']        = 'Izbriši primer vtičnika';
+$lang['widgets.view_code']				= 'Ogled kode';
 
 $lang['widgets.instance_title']         = 'Naslov';
 $lang['widgets.tag_title']              = 'Značka';
-
-$lang['widgets.instance_edit']          = 'Uredi';
-$lang['widgets.instance_delete']        = 'Izbriši';
 
 $lang['widgets.no_available_widgets']		= 'Trenutno ni na voljo nobenega vtičnika';

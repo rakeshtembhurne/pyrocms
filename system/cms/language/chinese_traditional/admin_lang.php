@@ -1,7 +1,7 @@
 <?php
 
 $lang['cp_admin_title'] 				= '管理系統'; 		//'Control Panel';
-$lang['cp_admin_home_title'] 			= '控制台'; 			//'Dashboard';
+$lang['global:dashboard'] 			= '控制台'; 			//'Dashboard';
 $lang['cp_admin_quick_links']			= '快速連結'; 		//'Quick Links';
 
 $lang['cp_welcome_title'] 				= '歡迎';
@@ -37,7 +37,7 @@ $lang['cp_nav_design']					= '網站設計'; 			//'Design';
 $lang['cp_nav_content']					= '網站內容'; 			//'Content';
 $lang['cp_nav_utilities']               = '公用程式'; 		//'Utilities';
 
-$lang['global:keywords']				= 'Keywords'; #translate
+$lang['global:keywords']				= '關鍵字';
 
 $lang['cp_must_login']	 				= '您必須登錄才能查看此頁面。'; 					//'You must be logged in to view this page.';
 $lang['cp_access_denied'] 				= '您沒有足夠的權限以查看此頁面'; 				//'You do not have sufficient permissions to view this page.';

@@ -15,7 +15,6 @@ $lang['pages.add_page_chunk']				= 'Dodaj košček strani';
 $lang['pages.page_chunk']					= 'Košček strani';
 $lang['pages.language_label']              = 'Jezik';
 $lang['pages.updated_label']               = 'Posodobljeno';
-$lang['pages.actions_label']               = 'Akcije';
 $lang['pages.unknown_label']               = 'Neznan';
 $lang['pages.title_label']                 = 'Naslov';
 $lang['pages.slug_label']                  = 'URL';
@@ -30,6 +29,7 @@ $lang['pages.js_label']                    = 'JavaScript';
 $lang['pages.access_label']                = 'Dostop';
 $lang['pages.rss_enabled_label']           = 'RSS omogočen';
 $lang['pages.comments_enabled_label']      = 'Komentarji omogočeni';
+$lang['pages.strict_uri_label']			   = 'Require an exact uri match?'; #translate
 
 $lang['pages.status_label']                = 'Stanje';
 $lang['pages.draft_label']                 = 'Osnutek';
@@ -40,8 +40,6 @@ $lang['pages.current_label']               = 'Trenutno';
 $lang['pages.view_label']                  = 'Ogled';
 $lang['pages.create_label']                = 'Dodaj podstran';
 $lang['pages.duplicate_label']				= 'Podvoji';
-$lang['pages.edit_label']                  = 'Uredi';
-$lang['pages.delete_label']                = 'Izbriši';
 
 // titles
 $lang['pages.create_title']                = 'Dodaj stran';
@@ -62,8 +60,10 @@ $lang['pages_mass_delete_success']         = '%s strani so bile izbrisane.';
 $lang['pages_delete_none_notice']          = 'Nobena stran ni bila izbrisana.';
 $lang['pages_page_already_exist_error']    = 'Stran s URL-jem "%s" že obstaja v %s.';
 $lang['pages_parent_not_exist_error']      = 'Glavna stran katero ste izbrali ne obstaja.';
+$lang['pages_chunk_slug_length']					= 'kratko ime Koščka strani ne more biti daljše od 30 zankov.';
 $lang['pages_root_folder']                = 'glavna mapa';
 
+$lang['pages.tree_explanation_title']	        = 'Explanation'; #translate
 $lang['pages.tree_explanation']            = 'Seznam na levi predstavlja strani na vaši spletni strani.
 Kliknite "+" ikono zraven strani da se prikaže seznam podstrani. Če kliknete na stran se vam bo tukaj prikazal seznam vse uporabnih informacij in možnosti.';
 

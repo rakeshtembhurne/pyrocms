@@ -2,16 +2,16 @@
 /**
  * Finnish translation.
  *
- * @author Mikael Kundert <mikael@kundert.fi>
- * @date 07.02.2011
- * @version 1.0.3
+ * @author Mikael Kundert
  */
 
 // labels
 $lang['blog_posted_label']                   = 'Lähetetty';
 $lang['blog_posted_label_alt']               = 'Lähetettiin';
-$lang['blog_written_by_label']				= 'Written by'; #translate
-$lang['blog_author_unknown']				= 'Unknown'; #translate
+$lang['blog_written_by_label']				= 'Kirjoittanut';
+$lang['blog_author_unknown']				= 'Tuntematon';
+$lang['blog_keywords_label']				= 'Avainsanat';
+$lang['blog_tagged_label']					= 'Merkitty';
 $lang['blog_category_label']                 = 'Kategoria';
 $lang['blog_post_label']                     = 'Merkintä';
 $lang['blog_date_label']                     = 'Päivä';
@@ -20,11 +20,6 @@ $lang['blog_time_label']                     = 'Aika';
 $lang['blog_status_label']                   = 'Status';
 $lang['blog_draft_label']                    = 'Luonnos';
 $lang['blog_live_label']                     = 'Julkinen';
-$lang['blog_actions_label']                  = 'Toiminnot';
-$lang['blog_view_label']                     = 'Katso';
-$lang['blog_preview_label']                  = 'Esikatsele';
-$lang['blog_edit_label']                     = 'Muokkaa';
-$lang['blog_delete_label']                   = 'Poista';
 $lang['blog_content_label']                  = 'Sisältö';
 $lang['blog_options_label']                  = 'Valinnat';
 $lang['blog_title_label']                    = 'Otsikko';

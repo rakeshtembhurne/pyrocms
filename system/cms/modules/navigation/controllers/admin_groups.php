@@ -2,24 +2,39 @@
 /**
  * Admin_groups controller
  *
- * @author 		Phil Sturgeon, Yorick Peterse - PyroCMS Dev Team
- * @package 	PyroCMS
- * @subpackage 	Navigation module
- * @category 	Modules
+ * @author		PyroCMS Dev Team
+ * @package	 PyroCMS\Core\Modules\Navigation\Controllers
  */
 class Admin_groups extends Admin_Controller
 {
+
 	/**
-	 * The array containing the rules for the navigation groups
-	 * @var array
-	 * @access private
+	 * The current active section.
+	 *
+	 * @var int
 	 */
-	private $validation_rules = array();
+	protected $section = 'groups';
+
+	/**
+	 * The array containing the rules for the navigation groups.
+	 *
+	 * @var array
+	 */
+	private $validation_rules = array(
+		array(
+			'field' => 'title',
+			'label' => 'lang:nav_title_label',
+			'rules' => 'trim|required|max_length[50]'
+		),
+		array(
+			'field' => 'abbrev',
+			'label' => 'lang:nav_abbrev_label',
+			'rules' => 'trim|required|max_length[50]'
+		)
+	);
 
 	/**
 	 * Constructor method
-	 * @access public
-	 * @return void
 	 */
 	function __construct()
 	{
@@ -32,38 +47,19 @@ class Admin_groups extends Admin_Controller
 		$this->lang->load('navigation');
 
 		// Set the validation rules
-		$this->validation_rules = array(
-			array(
-				'field' => 'title',
-				'label' => lang('nav_title_label'),
-				'rules' => 'trim|required|max_length[50]'
-			),
-			array(
-				'field'	=> 'abbrev',
-				'label'	=> lang('nav_abbrev_label'),
-				'rules'	=> 'trim|required|max_length[20]'
-			)
-		);
-
 		$this->form_validation->set_rules($this->validation_rules);
-		$this->template->set_partial('shortcuts', 'admin/partials/shortcuts');
 	}
 
 	/**
-	 * Index method, redirects back to navigation/index
-	 * @access public
-	 * @return void
+	 * Index method, redirects back to navigation/index.
 	 */
 	public function index()
 	{
-		// Redirect
 		redirect('admin/navigation');
 	}
 
 	/**
-	 * Create a new navigation group
-	 * @access public
-	 * @return void
+	 * Create a new navigation group.
 	 */
 	public function create()
 	{
@@ -71,9 +67,11 @@ class Admin_groups extends Admin_Controller
 		if ($this->form_validation->run())
 		{
 			// Insert the new group
-			if ($this->navigation_m->insert_group($_POST) > 0)
+			if ($id = $this->navigation_m->insert_group($_POST) > 0)
 			{
 				$this->session->set_flashdata('success', $this->lang->line('nav_group_add_success'));
+				// Fire an event. A new navigation group has been created.
+				Events::trigger('navigation_group_created', $id);
 			}
 			else
 			{
@@ -85,31 +83,35 @@ class Admin_groups extends Admin_Controller
 		}
 
 		// Loop through each rule
-		foreach($this->validation_rules as $rule)
+		foreach ($this->validation_rules as $rule)
 		{
 			$navigation_group->{$rule['field']} = $this->input->post($rule['field']);
 		}
 
 		// Render the view
-		$this->data->navigation_group =& $navigation_group;
+		$this->template->navigation_group =& $navigation_group;
 		$this->template
-			->title($this->module_details['name'],lang('nav_group_label'), lang('nav_group_create_title'))
-			->build('admin/groups/create', $this->data);
+			->title($this->module_details['name'], lang('nav_group_label'), lang('nav_group_create_title'))
+			->build('admin/groups/create');
 	}
 
 	/**
-	 * Delete a navigation group (or delete multiple ones)
-	 * @access public
-	 * @param int $id The ID of the group
-	 * @return void
+	 * Delete a navigation group (or delete multiple ones).
+	 *
+	 * @param int $id The id of the group.
 	 */
 	public function delete($id = 0)
 	{
+		$deleted_ids = FALSE;
+
 		// Delete one
-		if($id)
+		if ($id)
 		{
-			$this->navigation_m->delete_group($id);
-			$this->navigation_m->delete_link(array('navigation_group_id'=>$id));
+			if ($this->navigation_m->delete_group($id))
+			{
+				$deleted_ids[] = $id;
+				$this->navigation_m->delete_link(array('navigation_group_id' => $id));
+			}
 		}
 
 		// Delete multiple
@@ -117,9 +119,18 @@ class Admin_groups extends Admin_Controller
 		{
 			foreach (array_keys($this->input->post('delete')) as $id)
 			{
-				$this->navigation_m->delete_group($id);
-				$this->navigation_m->delete_link(array('navigation_group_id'=>$id));
+				if ($this->navigation_m->delete_group($id))
+				{
+					$deleted_ids[] = $id;
+					$this->navigation_m->delete_link(array('navigation_group_id' => $id));
+				}
 			}
+		}
+
+		// Fire an event. One or more navigation groups have been deleted.
+		if ( ! empty($deleted_ids))
+		{
+			Events::trigger('navigation_group_deleted', $deleted_ids);
 		}
 
 		// Set the message and redirect
@@ -127,4 +138,3 @@ class Admin_groups extends Admin_Controller
 		redirect('admin/navigation/index');
 	}
 }
-?>

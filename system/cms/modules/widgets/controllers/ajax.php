@@ -2,10 +2,8 @@
 /**
  * Ajax controller for the widgets module
  *
- * @package 		PyroCMS
- * @subpackage 		Widgets
- * @category 		Modules
- * @author			PyroCMS Development Team
+ * @author		PyroCMS Dev Team
+ * @package		PyroCMS\Core\Modules\Widgets\Controllers
  */
 class Ajax extends MY_Controller
 {
@@ -40,6 +38,7 @@ class Ajax extends MY_Controller
 			case 'instance':
 				foreach ($ids as $id)
 				{
+					$id = str_replace('instance-', '', $id);
 					$this->widgets->update_instance_order($id, ++$i);
 				}
 				break;

@@ -4,8 +4,8 @@ DROP TABLE IF EXISTS `core_users`, `core_settings`, `core_sites`, `{PREFIX}schem
 
 CREATE TABLE core_settings (
 	`slug` varchar( 30 ) COLLATE utf8_unicode_ci NOT NULL ,
-	`value` varchar( 255 ) COLLATE utf8_unicode_ci NOT NULL ,
-	`default` varchar( 255 ) COLLATE utf8_unicode_ci NOT NULL ,
+	`default` text COLLATE utf8_unicode_ci NOT NULL,
+	`value` text COLLATE utf8_unicode_ci NOT NULL,
 	PRIMARY KEY ( `slug` ) ,
 	UNIQUE KEY `unique - slug` ( `slug` ) ,
 	KEY `index - slug` ( `slug` )
@@ -15,7 +15,8 @@ CREATE TABLE core_settings (
 
 INSERT INTO `core_settings` (`slug`, `value`, `default`) VALUES 
 	('date_format', 'g:ia -- m/d/y', 'g:ia -- m/d/y'),
-	('lang_direction', 'ltr', 'ltr');
+	('lang_direction', 'ltr', 'ltr'),
+	('status_message', 'This site has been disabled by a super-administrator.', 'This site has been disabled by a super-administrator.');
 	
 -- command split --
 
@@ -24,6 +25,7 @@ CREATE TABLE `core_sites` (
 	`name` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
     `ref` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
     `domain` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci,
+	`active` TINYINT(1) NOT NULL default '1',
     `created_on` INT(11) NOT NULL default '0',
     `updated_on` INT(11) NOT NULL default '0',
     UNIQUE KEY `Unique ref` (`ref`),
@@ -108,22 +110,16 @@ CREATE TABLE IF NOT EXISTS `{PREFIX}profiles` (
   `address_line2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address_line3` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `postcode` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `msn_handle` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `yim_handle` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `aim_handle` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `gtalk_handle` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `gravatar` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `website` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `twitter_access_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `twitter_access_token_secret` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updated_on` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;
 
 -- command split --
 			
-INSERT INTO `{PREFIX}profiles` (`id`, `user_id`, `first_name`, `last_name`, `display_name`, `company`, `lang`, `bio`, `dob`, `gender`, `phone`, `mobile`, `address_line1`, `address_line2`, `address_line3`, `postcode`, `msn_handle`, `yim_handle`, `aim_handle`, `gtalk_handle`, `gravatar`, `updated_on`) VALUES
-    (1, 1, '{FIRST-NAME}', '{LAST-NAME}', '{DISPLAY-NAME}', '', 'en', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `{PREFIX}profiles` (`id`, `user_id`, `first_name`, `last_name`, `display_name`, `company`, `lang`, `bio`, `dob`, `gender`, `phone`, `mobile`, `address_line1`, `address_line2`, `address_line3`, `postcode`, `updated_on`) VALUES
+    (1, 1, '{FIRST-NAME}', '{LAST-NAME}', '{DISPLAY-NAME}', '', 'en', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- command split --
 

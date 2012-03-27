@@ -1,5 +1,13 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+$lang['user_add_field']                        	= 'Add User Profile Field';
+$lang['user_profile_delete_success']           	= 'User profile field deleted successfully';
+$lang['user_profile_delete_failure']            = 'There was a problem with deleting your user profile field';
+$lang['profile_user_basic_data_label']  		= 'Basic Data';
+$lang['profile_company']         	  			= 'Company'; 
+$lang['profile_updated_on']           			= 'Updated On';
+$lang['user_profile_fields_label']	 		 	= 'Profile Fields';
+
 $lang['user_register_header']                  = 'Registration';
 $lang['user_register_step1']                   = '<strong>Step 1:</strong> Register';
 $lang['user_register_step2']                   = '<strong>Step 2:</strong> Activate';
@@ -7,14 +15,14 @@ $lang['user_register_step2']                   = '<strong>Step 2:</strong> Activ
 $lang['user_login_header']                     = 'Login';
 
 // titles
-$lang['user_add_title']                        = 'Add user';
-$lang['user_list_title'] 				= 'List users';
-$lang['user_inactive_title']                   = 'Inactive users';
-$lang['user_active_title']                     = 'Active users';
+$lang['user_add_title']                        = 'Add User';
+$lang['user_list_title'] 					   = 'Users';
+$lang['user_inactive_title']                   = 'Inactive Users';
+$lang['user_active_title']                     = 'Active Users';
 $lang['user_registred_title']                  = 'Registered Users';
 
 // labels
-$lang['user_edit_title']                       = 'Edit user "%s"';
+$lang['user_edit_title']                       = 'Edit User "%s"';
 $lang['user_details_label']                    = 'Details';
 $lang['user_first_name_label']                 = 'First Name';
 $lang['user_last_name_label']                  = 'Last Name';
@@ -26,11 +34,7 @@ $lang['user_password_confirm_label']           = 'Confirm Password';
 $lang['user_name_label']                       = 'Name';
 $lang['user_joined_label']                     = 'Joined';
 $lang['user_last_visit_label']                 = 'Last visit';
-$lang['user_actions_label']                    = 'Actions';
 $lang['user_never_label']                      = 'Never';
-$lang['user_delete_label']                     = 'Delete';
-$lang['user_edit_label']                       = 'Edit';
-$lang['user_view_label']                       = 'View';
 
 $lang['user_no_inactives']                     = 'There are no inactive users.';
 $lang['user_no_registred']                     = 'There are no registered users.';
@@ -70,10 +74,12 @@ $lang['user_lang']                             = 'Language';
 
 $lang['user_activation_code']                  = 'Activation code';
 
+$lang['user_reset_instructions']			   = 'Enter your email address or username';
 $lang['user_reset_password_link']              = 'Forgot your password?';
 
 $lang['user_activation_code_sent_notice']      = 'An email has been sent to you with your activation code.';
 $lang['user_activation_by_admin_notice']       = 'Your registration is awaiting approval by an administrator.';
+$lang['user_registration_disabled']            = 'Sorry, but the user registration is disabled.';
 
 // -- Settings ---------------------------------------------------------------------------------------------
 
@@ -115,6 +121,7 @@ $lang['user_mass_delete_error']                = 'You need to select users first
 // Register
 $lang['user_email_pass_missing']               = 'Email or password fields are not complete.';
 $lang['user_email_exists']                     = 'The email address you have chosen is already in use with a different user.';
+$lang['user_register_error']				   = 'We think you are a bot. If we are mistaken please accept our apologies.';
 $lang['user_register_reasons']                 = 'Join up to access special areas normally restricted. This means your settings will be remembered, more content and less ads.';
 
 
@@ -137,6 +144,7 @@ $lang['user_logged_out']                       = 'You have been logged out.';
 $lang['user_forgot_incorrect']                 = "No account was found with these details.";
 
 $lang['user_password_reset_message']           = "Your password has been reset. You should recieve the email within the next 2 hours. If you don't, it might have gone into your junk mail by accident.";
+
 
 // Emails ----------------------------------------------------------------------------------------------------
 
@@ -162,6 +170,7 @@ $lang['profile_registred_on_label']   = 'Registered on';
 $lang['profile_last_login_label']     = 'Last login';
 $lang['profile_male_label']           = 'Male';
 $lang['profile_female_label']         = 'Female';
+$lang['user_profile_fields_label']	  = 'Profile Fields';
 
 $lang['profile_not_set_up']           = 'This user does not have a profile set up.';
 
@@ -187,22 +196,11 @@ $lang['profile_mobile']               = 'Mobile';
 $lang['profile_address']              = 'Address';
 $lang['profile_address_line1']        = 'Line #1';
 $lang['profile_address_line2']        = 'Line #2';
-$lang['profile_address_line3']        = 'Line #3';
+$lang['profile_address_line3']        = 'Town/City';
 $lang['profile_address_postcode']     = 'Post/Zip Code';
 $lang['profile_website']              = 'Website';
 
-$lang['profile_messenger_section']    = 'Instant messengers';
-
-$lang['profile_msn_handle']           = 'MSN';
-$lang['profile_aim_handle']           = 'AIM';
-$lang['profile_yim_handle']           = 'Yahoo! messenger';
-$lang['profile_gtalk_handle']         = 'GTalk';
-
-$lang['profile_avatar_section']       = 'Avatar';
-$lang['profile_social_section']       = 'Social';
-
-$lang['profile_gravatar']             = 'Gravatar';
-$lang['profile_twitter']              = 'Twitter';
+$lang['profile_api_section']     	  = 'API Access';
 
 $lang['profile_edit_success']         = 'Your profile has been saved.';
 $lang['profile_edit_error']           = 'An error occurred.';

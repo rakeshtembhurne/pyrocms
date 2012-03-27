@@ -11,11 +11,10 @@ $lang['pages.detail_label'] 					= 'Détails';
 
 // labels
 $lang['pages.page_label'] 						= 'Page';
-$lang['pages.add_page_chunk']						= 'Add Page Chunk'; #translate
-$lang['pages.page_chunk']							= 'Page Chunk'; #translate
+$lang['pages.add_page_chunk']						= 'Ajouter un Extrait de Page Chunk';
+$lang['pages.page_chunk']							= 'Extrait de Page';
 $lang['pages.language_label'] 					= 'Langue';
 $lang['pages.updated_label'] 					= 'Mis à jour';
-$lang['pages.actions_label'] 					= 'Actions';
 $lang['pages.unknown_label'] 					= 'Inconnu';
 $lang['pages.title_label'] 						= 'Titre';
 $lang['pages.slug_label'] 						= 'URL';
@@ -31,21 +30,20 @@ $lang['pages.access_label'] 					= 'Accès';
 $lang['pages.rss_enabled_label'] 				= 'RSS activé';
 $lang['pages.comments_enabled_label'] 			= 'Commentaires activés';
 $lang['pages.is_home_label']      				= 'Est ce la page par défaut (accueil) ?';
+$lang['pages.strict_uri_label']					= 'Require an exact uri match?'; #translate
 
 $lang['pages.status_label'] 					= 'Statut';
 $lang['pages.draft_label'] 						= 'Brouillon';
 $lang['pages.live_label'] 						= 'Publié';
 $lang['pages.revisions_label']					= 'Révisions';
 $lang['pages.compare_label']                    = 'Comparer';
-$lang['pages.preview_label']                                    = 'Previsualiser';
-$lang['pages.current_label']                                    = 'Courant';
+$lang['pages.preview_label']                    = 'Previsualiser';
+$lang['pages.current_label']                    = 'Courant';
 
 
 $lang['pages.view_label'] 						= 'Visualiser';
 $lang['pages.create_label'] 					= 'Ajouter enfant';
-$lang['pages.edit_label'] 						= 'Modifier';
-$lang['pages.duplicate_label']					= 'Duplicate'; #translate
-$lang['pages.delete_label'] 					= 'Supprimer';
+$lang['pages.duplicate_label']					= 'Dupliquer';
 
 // titles
 $lang['pages.create_title'] 					= 'Créer une page';
@@ -66,8 +64,10 @@ $lang['pages_mass_delete_success'] 				= '%s pages ont été supprimées.';
 $lang['pages_delete_none_notice'] 				= 'Aucune page n\'a été supprimée.';
 $lang['pages_page_already_exist_error'] 		= 'Une page avec l\'URL "%s" existe déjà dans %s.';
 $lang['pages_parent_not_exist_error'] 			= 'La page parente que vous avez sélectionné n\'existe pas.';
-$lang['pages_root_folder']                = 'the top level'; #translate
+$lang['pages_chunk_slug_length']					= 'Page Chunk slugs may be no more than 30 characters in length.'; #translate
+$lang['pages_root_folder']                = 'le top level';
 
+$lang['pages.tree_explanation_title']	        = 'Explanation'; #translate
 $lang['pages.tree_explanation'] 				= 'La liste de gauche affiche les pages de votre site web.
 Cliquez sur l\'icône "+" à côté de la page pour afficher les pages incluses. En cliquant sur une page vous verrez toutes sortes d\'informations utiles dans cette boîte.';
 

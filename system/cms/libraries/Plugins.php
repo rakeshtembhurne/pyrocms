@@ -1,87 +1,91 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * @package 		PyroCMS
- * @subpackage 		Libraries
- * @author			Phil Sturgeon - PyroCMS Development Team
- *
  * Central library for Plugin logic
+ *
+ * @author		Phil Sturgeon
+ * @author		PyroCMS Dev Team
+ * @package	 PyroCMS\Core\Libraries
  */
 abstract class Plugin
 {
 	private $attributes = array();
 	private $content = array();
 
-	// ------------------------------------------------------------------------
+	/**
+	 * Set Data for the plugin.
+	 *
+	 * Avoid doing this in constructor so we do not force logic on developers.
+	 *
+	 * @param array $content Content of the tags if any
+	 * @param array $attributes Attributes passed to the plugin
+	 */
+	public function set_data($content, $attributes)
+	{
+		$content AND $this->content = $content;
+		$attributes AND $this->attributes = $attributes;
+	}
 
+	/**
+	 * Make the Codeigniter object properies & methods accessible to this class.
+	 *
+	 * @param string $var The name of the method/property.
+	 *
+	 * @return mixed
+	 */
 	public function __get($var)
 	{
 		return get_instance()->$var;
 	}
 
-	// ------------------------------------------------------------------------
-
 	/**
-	 * Get param
+	 * Getter for the content.
 	 *
-	 * This is a helper used from the parser files to process a list of params
-	 *
-	 * @param	array - Params passed from view
-	 * @param	array - Array of default params
-	 * @return 	array
+	 * @return array
 	 */
 	public function content()
 	{
 		return $this->content;
 	}
 
-	// ------------------------------------------------------------------------
-
 	/**
-	 * Get param
+	 * Getter for the attributes.
 	 *
-	 * This is a helper used from the parser files to process a list of params
-	 *
-	 * @param	array - Params passed from view
-	 * @param	array - Array of default params
-	 * @return 	array
+	 * @return array
 	 */
 	public function attributes()
 	{
 		return $this->attributes;
 	}
 
-	// ------------------------------------------------------------------------
-
 	/**
-	 * Get param
+	 * Get the value of an attribute.
 	 *
-	 * This is a helper used from the parser files to process a list of params
+	 * @param string $param The name of the attribute.
+	 * @param mixed $default The default value to return if no value can be found.
 	 *
-	 * @param	array - Params passed from view
-	 * @param	array - Array of default params
-	 * @return 	array
+	 * @return mixed The value.
 	 */
 	public function attribute($param, $default = NULL)
 	{
 		return isset($this->attributes[$param]) ? $this->attributes[$param] : $default;
 	}
 
-	// ------------------------------------------------------------------------
-
 	/**
-	 * Get param
+	 * Render a view located in a module.
 	 *
-	 * This is a helper used from the parser files to process a list of params
+	 * @todo Document this better.
 	 *
-	 * @param	array - Params passed from view
-	 * @param	array - Array of default params
-	 * @return 	array
+	 * @param string $module The module to load the view from.
+	 * @param string $view The name of the view to load.
+	 * @param array $vars The array of variables to pass to the view.
+	 *
+	 * @return string The rendered view.
 	 */
 	public function module_view($module, $view, $vars = array())
 	{
-		if (file_exists($this->template->get_views_path() . 'modules/' . $module . '/' . $view . (pathinfo($view, PATHINFO_EXTENSION) ? '' : '.php')))
+		if (file_exists($this->template->get_views_path().'modules/'.$module.'/'.$view.(pathinfo($view, PATHINFO_EXTENSION) ? '' : '.php')))
 		{
-			$path = $this->template->get_views_path() . 'modules/' . $module . '/';
+			$path = $this->template->get_views_path().'modules/'.$module.'/';
 		}
 		else
 		{
@@ -94,29 +98,12 @@ abstract class Plugin
 		// add this view location to the array
 		$this->load->set_view_path($path);
 
-		$content = $this->load->_ci_load(array('_ci_view' => $view, '_ci_vars' => ((array) $vars), '_ci_return' => TRUE));
+		$content = $this->load->_ci_load(array('_ci_view' => $view, '_ci_vars' => ((array)$vars), '_ci_return' => TRUE));
 
 		// Put the old array back
 		$this->load->set_view_path($save_path);
 
 		return $content;
-	}
-
-	// ------------------------------------------------------------------------
-
-	/**
-	 * Get param
-	 *
-	 * This is a helper used from the parser files to process a list of params
-	 *
-	 * @param	array - Params passed from view
-	 * @param	array - Array of default params
-	 * @return 	array
-	 */
-	public function set_data($data)
-	{
-		isset($data['content']) AND $this->content = $data['content'];
-		isset($data['attributes']) AND $this->attributes = $data['attributes'];
 	}
 }
 
@@ -124,45 +111,45 @@ class Plugins
 {
 	private $loaded = array();
 
-	function __construct()
+	public function __construct()
 	{
 		$this->_ci = & get_instance();
 	}
 
-	function locate($data)
+	public function locate($plugin, $attributes, $content)
 	{
-		if ( ! isset($data['segments'][0]) OR ! isset($data['segments'][1]))
+		if (strpos($plugin, ':') === FALSE)
 		{
 			return FALSE;
 		}
-
 		// Setup our paths from the data array
-		$class	= $data['segments'][0];
-		$method	= $data['segments'][1];
+		list($class, $method) = explode(':', $plugin);
 
 		foreach (array(APPPATH, ADDONPATH, SHARED_ADDONPATH) as $directory)
 		{
 			if (file_exists($path = $directory.'plugins/'.$class.'.php'))
 			{
-				return $this->_process($path, $class, $method, $data);
+				return $this->_process($path, $class, $method, $attributes, $content);
 			}
-			
-			else if (defined('ADMIN_THEME') and file_exists($path = APPPATH.'themes/'.ADMIN_THEME.'/plugins/'.$class.'.php'))
-			{
-				return $this->_process($path, $class, $method, $data);
+
+			else {
+				if (defined('ADMIN_THEME') and file_exists($path = APPPATH.'themes/'.ADMIN_THEME.'/plugins/'.$class.'.php'))
+				{
+					return $this->_process($path, $class, $method, $attributes, $content);
+				}
 			}
 
 			// Maybe it's a module
 			if (module_exists($class))
 			{
-				if (file_exists($path = $directory . 'modules/' . $class . '/plugin.php'))
+				if (file_exists($path = $directory.'modules/'.$class.'/plugin.php'))
 				{
 					$dirname = dirname($path).'/';
 
 					// Set the module as a package so I can load stuff
 					$this->_ci->load->add_package_path($dirname);
 
-					$response = $this->_process($path, $class, $method, $data);
+					$response = $this->_process($path, $class, $method, $attributes, $content);
 
 					$this->_ci->load->remove_package_path($dirname);
 
@@ -171,25 +158,27 @@ class Plugins
 			}
 		}
 
-		log_message('debug', 'Unable to load: ' . $class);
+		log_message('debug', 'Unable to load: '.$class);
 
-		return FALSE;
+		return false;
 	}
-
-	 // --------------------------------------------------------------------
 
 	/**
 	 * Process
 	 *
 	 * Just process the class
 	 *
-	 * @access	private
-	 * @param	object
-	 * @param	string
-	 * @param	array
-	 * @return	mixed
+	 * @todo Document this better.
+	 *
+	 * @param string $path
+	 * @param string $class
+	 * @param string $method
+	 * @param array $attributes
+	 * @param array $content
+	 *
+	 * @return bool|mixed
 	 */
-	private function _process($path, $class, $method, $data)
+	private function _process($path, $class, $method, $attributes, $content)
 	{
 		$class = strtolower($class);
 		$class_name = 'Plugin_'.ucfirst($class);
@@ -197,30 +186,36 @@ class Plugins
 		if ( ! isset($this->loaded[$class]))
 		{
 			include $path;
-			$this->loaded[$class] = TRUE;
+			$this->loaded[$class] = true;
 		}
 
 		if ( ! class_exists($class_name))
 		{
-//			throw new Exception('Plugin "' . $class_name . '" does not exist.');
-//			return FALSE;
+			//throw new Exception('Plugin "' . $class_name . '" does not exist.');
+			//return FALSE;
 
-			log_message('error', 'Plugin class "' . $class_name . '" does not exist.');
+			log_message('error', 'Plugin class "'.$class_name.'" does not exist.');
 
-			return FALSE;
+			return false;
 		}
 
 		$class_init = new $class_name;
-		$class_init->set_data($data);
+		$class_init->set_data($content, $attributes);
 
 		if ( ! is_callable(array($class_init, $method)))
 		{
-//			throw new Exception('Method "' . $method . '" does not exist in plugin "' . $class_name . '".');
-//			return FALSE;
+			// But does a property exist by that name?
+			if (property_exists($class_init, $method))
+			{
+				return true;
+			}
 
-			log_message('error', 'Plugin method "' . $method . '" does not exist on class "' . $class_name . '".');
+			//throw new Exception('Method "' . $method . '" does not exist in plugin "' . $class_name . '".');
+			//return FALSE;
 
-			return FALSE;
+			log_message('error', 'Plugin method "'.$method.'" does not exist on class "'.$class_name.'".');
+
+			return false;
 		}
 
 		return call_user_func(array($class_init, $method));

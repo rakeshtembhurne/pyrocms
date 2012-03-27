@@ -10,6 +10,7 @@
 	<script type="text/javascript">
 		var APPPATH_URI = "<?php echo APPPATH_URI;?>";
 		var BASE_URL = "<?php echo rtrim(site_url(), '/').'/';?>";
+		var SITE_URL = "<?php echo rtrim(site_url(), '/').'/';?>";
 		var BASE_URI = "<?php echo BASE_URI;?>";
 	</script>
 
@@ -63,7 +64,7 @@
 		})(jQuery);
 	</script>
 
-	<?php echo css('admin/basic_layout.css'); ?>
+	<?php echo Asset::css('admin/basic_layout.css'); ?>
 </head>
 <body>
 	<?php $this->load->view('admin/partials/notices') ?>

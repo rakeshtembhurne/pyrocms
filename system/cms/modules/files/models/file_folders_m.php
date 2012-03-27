@@ -1,43 +1,41 @@
 <?php  defined('BASEPATH') OR exit('No direct script access allowed');
 /**
- * PyroCMS
- *
- * An open source CMS based on CodeIgniter
- *
- * @package		PyroCMS
- * @author		PyroCMS Dev Team
- * @license		Apache License v2.0
- * @link		http://pyrocms.com
- * @since		Version 1.0-dev
- * @filesource
- */
-
-/**
  * PyroCMS File Folders Model
  *
  * Interacts with the file_folders table in the database.
  *
  * @author		Dan Horrigan <dan@dhorrigan.com>
  * @author		Eric Barnes <eric@pyrocms.com>
- * @package		PyroCMS
- * @subpackage	Files
+ * @author		PyroCMS Dev Team
+ * @package		PyroCMS\Core\Modules\Files\Models
  */
 class File_folders_m extends MY_Model {
 
 	private $_folders = array();
 	
+	// ------------------------------------------------------------------------
+
 	/**
 	 * Exists
 	 *
 	 * Checks if a given folder exists.
 	 *
 	 * @access	public
-	 * @param	int		The folder id
+	 * @param	int		The folder id or slug
 	 * @return	bool	If the folder exists
 	 */
-	public function exists($folder_id = 0)
+	public function exists($folder = 0)
 	{
-		return (bool) (parent::count_by(array('id' => $folder_id)) > 0);
+		if (is_numeric($folder))
+		{
+			$count = array('id' => $folder);
+		}
+		else
+		{
+			$count = array('slug' => $folder);
+		}
+
+		return (bool) (parent::count_by($count) > 0);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -154,30 +152,6 @@ class File_folders_m extends MY_Model {
 	}
 	
 	// ------------------------------------------------------------------------
-	
-	/**
-	* Breadcrumb
-	*
-	* Generates a breadcrumb nav for folders
-	*
-	* @param	int $node The current folder id
-	* @param	int $lev The current level
-	* @return	array
-	*/
-	public function breadcrumb($id, $separator = '&raquo;', $limit = 3)
-	{
-		if ( ! $this->_folders)
-		{
-			$this->folder_tree();
-		}
-
-		return $this->_build_asc_segments($id, array(
-			'segments'	=> $this->_folders,
-			'attribute'	=> 'name',
-			'separator'	=> ' ' . trim($separator) . ' ',
-			'limit'		=> $limit
-		));
-	}
 
 	public function _build_asc_segments($id, $options = array())
 	{
@@ -212,6 +186,8 @@ class File_folders_m extends MY_Model {
 		return implode($separator, $arr);
 	}
 
+	// ------------------------------------------------------------------------
+
 	public function get_by_path($path)
 	{
 		if (is_array($path))
@@ -235,13 +211,6 @@ class File_folders_m extends MY_Model {
 		}
 
 		return array();
-	}
-
-	public function delete($id = 0)
-	{
-		$this->file_m->delete_files($id);
-
-		return parent::delete($id);
 	}
 }
 

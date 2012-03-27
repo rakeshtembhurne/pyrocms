@@ -16,13 +16,9 @@ $lang['comments.message_label'] 			= '內容';
 $lang['comments.status_label'] 				= '狀態';
 $lang['comments.activate_label'] 			= '核准';
 $lang['comments.deactivate_label'] 			= '取消核准';
-$lang['comments.author_label'] 				= '作者';
 $lang['comments.module_label'] 				= '模組';
 $lang['comments.item_label'] 				= '項目';
 $lang['comments.date_label'] 				= '日期';
-$lang['comments.actions_label'] 			= '操作';
-$lang['comments.edit_label'] 				= '編輯';
-$lang['comments.delete_label'] 				= '刪除';
 $lang['comments.posted_label'] 				= '已發佈'; 	//'Posted';
 $lang['comments.from_label'] 				= '從'; 		//'From';
 $lang['comments.preview_label'] 			= '預覽';
@@ -31,7 +27,7 @@ $lang['comments.send_label'] 				= '發表回應';
 $lang['comments.inactive_title'] 			= '待核准的回應';
 $lang['comments.active_title'] 				= '已核准的回應';
 $lang['comments.edit_title'] 				= '編輯回應';
-$lang['comments.list_title'] 				= 'List comments'; #translate
+$lang['comments.list_title'] 				= '回應列表';
 
 // messages
 $lang['comments.add_success'] 				= '回應已經儲存。';
@@ -57,8 +53,8 @@ $lang['comments.delete_multi_success'] 		= '這些回應 #%s 已經被刪除，�
 $lang['comments.no_comments'] 				= '目前沒有回應';
 
 // Helper counter comments
-$lang['comments.counter_none_label']		= 'No comment'; #translate
-$lang['comments.counter_singular_label']	= '%d comment'; #translate
-$lang['comments.counter_plural_label']		= '%d comments'; #translate
+$lang['comments.counter_none_label']		= '沒有回應';
+$lang['comments.counter_singular_label']	= '%d 回應';
+$lang['comments.counter_plural_label']		= '%d 回應';
 
 /* End of file comments_lang.php */

@@ -1,5 +1,13 @@
 <?php
 
+$lang['user_add_field']                        	= 'Add User Profile Field'; #translate
+$lang['user_profile_delete_success']           	= 'User profile field deleted successfully'; #translate
+$lang['user_profile_delete_failure']            = 'There was a problem with deleting your user profile field'; #translate
+$lang['profile_user_basic_data_label']  		= 'Basic Data'; #translate
+$lang['profile_company']         	  			= 'Company'; #translate
+$lang['profile_updated_on']           			= 'Updated On'; #translate
+$lang['user_profile_fields_label']	 		 	= 'Profile Fields'; #translate`
+
 $lang['user_register_header'] 			= 'الإشتراك';
 $lang['user_register_step1'] 			= '<strong>الخطوة الأولى:</strong> الإشتراك';
 $lang['user_register_step2'] 			= '<strong>الخطوة الثانية:</strong> التفعيل';
@@ -26,11 +34,7 @@ $lang['user_password_confirm_label'] 	= 'تأكيد كلمة السرّ';
 $lang['user_name_label'] 				= 'الإسم';
 $lang['user_joined_label'] 				= 'انضم في';
 $lang['user_last_visit_label'] 			= 'آخر زيارة';
-$lang['user_actions_label'] 			= 'الإجراءات';
 $lang['user_never_label'] 				= 'لم يتم';
-$lang['user_delete_label'] 				= 'حذف';
-$lang['user_edit_label'] 				= 'تعديل';
-$lang['user_view_label'] 				= 'عرض';
 
 $lang['user_no_inactives'] 				= 'ليس هناك أي مستخدمين مُعطلين.';
 $lang['user_no_registred'] 				= 'ليس هناك أي مستخدمين مُسجلين.';
@@ -70,10 +74,12 @@ $lang['user_lang']						= 'اللغة';
 
 $lang['user_activation_code'] 			= 'رمز التفعيل';
 
+$lang['user_reset_instructions']			   = 'اكتب عنوان بريدك الإلكتروني أو اسم المستخدم الخاص بك';
 $lang['user_reset_password_link'] 		= 'نسيت كلمة السرّ الخاصة بك؟';
 
 $lang['user_activation_code_sent_notice']	= 'أرسلت رسالة إليك تحتوي رمز التفعيل.';
 $lang['user_activation_by_admin_notice'] 	= 'تسجيلك في الموقع بانتظار موافقة الإدارة.';
+$lang['user_registration_disabled']            = 'Sorry, but the user registration is disabled.'; #translate
 
 // -- Settings ---------------------------------------------------------------------------------------------
 
@@ -115,6 +121,7 @@ $lang['user_mass_delete_error'] 				= 'يجب أن تحدد المستخدمين
 // Register
 $lang['user_email_pass_missing'] 				= 'حقل عنوان البريد الإلكتروني أو كلمة السرّ غير مكتمل.';
 $lang['user_email_exists'] 						= 'عنوان البريد الإلكتروني الذي اخترته يستخدمه مسبقاً مستخدم آخر.';
+$lang['user_register_error']				   = 'نعتقد أنك روبوت. إن كنا مخطئين فاقبل اعتذارنا.';
 $lang['user_register_reasons'] 					= 'اشترك معنا للوصول إلى الأقسام المحجوبة من الموقع. اشتراكك يتيح لك حفظ إعداداتك والمزيد من المُحتوى والقليل من الدعائيات.';
 
 

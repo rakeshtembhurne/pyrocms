@@ -12,17 +12,28 @@
 <?php echo form_open(uri_string(), 'class="crud"'); ?>
 	<ul>
 	<li>
-		<label for="from"><?php echo lang('redirects.from');?></label>
-		<?php echo form_input('from', $redirect->from);?>
+		<label for="type"><?php echo lang('redirects.type');?></label><br>
+		<?php echo form_dropdown('type',
+				array('301'=>lang('redirects.301'),'302'=>lang('redirects.302')),
+				!empty($redirect->type) ? $redirect->type : '302');?>
 	</li>
+
+	<hr>
 	<li>
-		<label for="to"><?php echo lang('redirects.to');?></label>
+		<label for="from"><?php echo lang('redirects.from');?></label><br>
+		<?php echo form_input('from', str_replace('%', '*', $redirect->from));?>
+	</li>
+
+	<hr>
+
+	<li>
+		<label for="to"><?php echo lang('redirects.to');?></label><br>
 		<?php echo form_input('to', $redirect->to);?>
 	</li>
 	</ul>
-	
-	<br>
-	
+
+	<hr>
+
 	<div class="buttons">
 		<?php $this->load->view('admin/partials/buttons', array('buttons' => array('save', 'cancel') )); ?>
 	</div>

@@ -3,14 +3,19 @@
 /**
  * Admin controller for adding and managing widget areas.
  *
- * @package 		PyroCMS
- * @subpackage 		Modules
- * @category		Widgets
- * @author			PyroCMS Development Team
+ * @author		PyroCMS Dev Team
+ * @package 	PyroCMS\Core\Modules\Widgets\Controllers
  *
  */
 class Admin_areas extends Admin_Controller {
 
+	/**
+	 * The current active section
+	 * @access protected
+	 * @var string
+	 */
+	protected $section = 'areas';
+	
 	/**
 	 * Array that contains the validation rules
 	 *
@@ -46,9 +51,8 @@ class Admin_areas extends Admin_Controller {
 		$this->input->is_ajax_request() AND $this->template->set_layout(FALSE);
 
 		$this->template
-			->set_partial('shortcuts', 'admin/partials/shortcuts')
-			->append_metadata(js('widgets.js', 'widgets'))
-			->append_metadata(css('widgets.css', 'widgets'));
+			->append_js('module::widgets.js')
+			->append_css('module::widgets.css');
 	}
 
 	public function index()
@@ -92,6 +96,9 @@ class Admin_areas extends Admin_Controller {
 
 			if ($id = $this->widgets->add_area($input))
 			{
+				// Fire an event. A widget area has been created. 
+				Events::trigger('widget_area_created');
+								
 				$area		= $this->widgets->get_area($id);
 				$status		= 'success';
 				$message	= lang('success_label');
@@ -121,7 +128,7 @@ class Admin_areas extends Admin_Controller {
 			{
 				$this->session->set_flashdata($status, $message);
 
-				redirect('admim/widgets');
+				redirect('admin/widgets');
 				return;
 			}
 
@@ -179,6 +186,9 @@ class Admin_areas extends Admin_Controller {
 
 			if ($this->widgets->edit_area($input))
 			{
+				// Fire an event. A widget area has been updated. 
+				Events::trigger('widget_area_updated', $id);
+				
 				$area = $this->widgets->get_area($id);
 				$status		= 'success';
 				$message	= lang('success_label');
@@ -247,6 +257,9 @@ class Admin_areas extends Admin_Controller {
 	{
 		if ($this->widgets->delete_area($id))
 		{
+			// Fire an event. A widget area has been deleted. 
+			Events::trigger('widget_area_deleted', $id);
+				
 			$status = 'success';
 			$message = lang('success_label');
 		}

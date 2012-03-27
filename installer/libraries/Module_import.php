@@ -14,11 +14,24 @@ class Module_import {
 	public function __construct()
 	{
 		$this->ci =& get_instance();
+
+		// Getting our model and MY_Model class set up
+		class_exists('CI_Model', FALSE) OR load_class('Model', 'core');
+		include(PYROPATH.'/core/MY_Model.php');
+
+		// Include some constants that modules may be looking for
+		define('SITE_REF', 'default');
+
+		// Now we can use stuff from our system/cms directory, hooray!
+		// Any dupes are generic so we shouldn't run into any 
+		// meaningful conflicts.
+		$this->ci->load->add_package_path(PYROPATH);
+
 		$db['hostname'] = $this->ci->session->userdata('hostname');
 		$db['username'] = $this->ci->session->userdata('username');
 		$db['password'] = $this->ci->session->userdata('password');
 		$db['database'] = $this->ci->input->post('database');
-		$db['port'] = $this->ci->input->post('port');
+		$db['port'] 	= $this->ci->input->post('port');
 		$db['dbdriver'] = "mysql";
 		$db['dbprefix'] = 'default_';
 		$db['pconnect'] = TRUE;
@@ -35,6 +48,7 @@ class Module_import {
 		is_dir(ADDONPATH.'modules') OR mkdir(ADDONPATH.'modules', DIR_READ_MODE, TRUE);
 		is_dir(ADDONPATH.'themes') OR mkdir(ADDONPATH.'themes', DIR_READ_MODE, TRUE);
 		is_dir(ADDONPATH.'widgets') OR mkdir(ADDONPATH.'widgets', DIR_READ_MODE, TRUE);
+		is_dir(ADDONPATH.'field_types') OR mkdir(ADDONPATH.'field_types', DIR_READ_MODE, TRUE);
 
 		// create the site specific upload folder
 		is_dir(dirname(FCPATH).'/uploads/default') OR mkdir(dirname(FCPATH).'/uploads/default', DIR_WRITE_MODE, TRUE);
@@ -124,7 +138,8 @@ class Module_import {
 			  `is_core` tinyint(1) NOT NULL,
 			  `updated_on` int(11) NOT NULL DEFAULT '0',
 			  PRIMARY KEY (`id`),
-			  UNIQUE KEY `slug` (`slug`)
+			  UNIQUE KEY `slug` (`slug`),
+			  INDEX `enabled` (`enabled`)
 			) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";
 
@@ -140,7 +155,7 @@ class Module_import {
 			 `user_data` text NULL,
 			PRIMARY KEY (`session_id`),
 			KEY `last_activity_idx` (`last_activity`)
-			);
+			) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 		";
 
 		// create a session table so they can use it if they want
@@ -148,20 +163,25 @@ class Module_import {
 
 		// Loop through directories that hold modules
 		$is_core = TRUE;
-
 		foreach (array(PYROPATH, ADDONPATH, SHARED_ADDONPATH) as $directory)
 		{
+			// some servers return false instead of an empty array
+			if ( ! $directory) continue;
+
 			// Loop through modules
-			foreach(glob($directory.'modules/*', GLOB_ONLYDIR) as $module_name)
+			if ($modules = glob($directory.'modules/*', GLOB_ONLYDIR))
 			{
-				$slug = basename($module_name);
-
-				if ( ! $details_class = $this->_spawn_class($slug, $is_core))
+				foreach ($modules as $module_name)
 				{
-					continue;
-				}
+					$slug = basename($module_name);
 
-				$this->install($slug, $is_core);
+					if ( ! $details_class = $this->_spawn_class($slug, $is_core))
+					{
+						continue;
+					}
+
+					$this->install($slug, $is_core);
+				}
 			}
 
 			// Going back around, 2nd time is addons

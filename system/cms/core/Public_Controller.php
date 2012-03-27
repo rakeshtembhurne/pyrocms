@@ -1,20 +1,45 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-
-// Code here is run before frontend controllers
+/**
+ * Code here is run before frontend controllers
+ * 
+ * @author PyroCMS Dev Team
+ * @package PyroCMS\Core\Controllers
+ */
 class Public_Controller extends MY_Controller
 {
+	/**
+	 * Loads the gazillion of stuff, in Flash Gordon speed.
+	 * @todo Document properly please.
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->benchmark->mark('public_controller_start');
-		
-		//check for a redirect
-		$this->load->model('redirects/redirect_m');
-		$uri = trim(uri_string(), '/');
-		if ($redirect = $this->redirect_m->get_from($uri))
+
+		// Check redirects if GET and Not AJAX
+		if ( ! $this->input->is_ajax_request() AND $_SERVER['REQUEST_METHOD'] == 'GET')
 		{
-			redirect($redirect->to);
+			$this->load->model('redirects/redirect_m');
+			$uri = trim(uri_string(), '/');
+
+			if ($redirect = $this->redirect_m->get_from($uri))
+			{
+				// Check if it was direct match
+				if ($redirect->from == $uri)
+				{
+					redirect($redirect->to,'location',$redirect->type);
+				}
+
+				// If it has back reference
+				if (strpos($redirect->to, '$') !== FALSE)
+				{
+					$from = str_replace('%', '(.*?)', $redirect->from);
+					$redirect->to = preg_replace('#^'.$from.'$#', $redirect->to, $uri);
+				}
+				// Redirect with wanted redirect header type
+				redirect($redirect->to,'location',$redirect->type);
+			}
 		}
 
 		Events::trigger('public_controller');
@@ -32,19 +57,16 @@ class Public_Controller extends MY_Controller
 		$this->load->model('pages/page_m');
 
 		// Load the current theme so we can set the assets right away
-		$this->theme = $this->themes_m->get();
-		
+		ci()->theme = $this->theme_m->get();
+
 		if (empty($this->theme->slug))
 		{
-			show_error('This site has been set to use a theme that does not exist. If you are an administrator please ' . anchor('admin/themes', 'change the theme') . '.');
+			show_error('This site has been set to use a theme that does not exist. If you are an administrator please '.anchor('admin/themes', 'change the theme').'.');
 		}
 
-		// Prepare Asset library
-	    $this->asset->set_theme($this->theme->slug);
-	
-		// Set the front-end theme directory
-		$this->config->set_item('theme_asset_dir', dirname($this->theme->path).'/');
-		$this->config->set_item('theme_asset_url', BASE_URL.dirname($this->theme->web_path).'/');
+		// Set the theme as a path for Asset library
+		Asset::add_path('theme', $this->theme->path.'/');
+		Asset::set_path('theme');
 
 	    // Set the theme view folder
 	    $this->template
@@ -56,9 +78,9 @@ class Public_Controller extends MY_Controller
 				</script>' );
 
 		// Is there a layout file for this module?
-		if ($this->template->layout_exists($this->module . '.html'))
+		if ($this->template->layout_exists($this->module.'.html'))
 		{
-			$this->template->set_layout($this->module . '.html');
+			$this->template->set_layout($this->module.'.html');
 		}
 
 		// Nope, just use the default layout
@@ -76,19 +98,17 @@ class Public_Controller extends MY_Controller
 			$this->template->append_metadata('<link rel="alternate" type="application/rss+xml" title="'.$this->settings->site_name.'" href="'.site_url('blog/rss/all.rss').'" />');
 	    }
 
-		// Enable profiler on local box
-	    if( ENV == 'local' && $this->input->get('_debug') )
-	    {
-	    	$this->output->enable_profiler(TRUE);
-	    }
-
 	    // Frontend data
 	    $this->load->library('variables/variables');
+		
+		// grab the theme options if there are any
+		$this->theme->options = $this->pyrocache->model('theme_m', 'get_values_by', array(array('theme' => $this->theme->slug) ));
 
         // Assign segments to the template the new way
 	    $this->template->variables = $this->variables->get_all();
 		$this->template->settings = $this->settings->get_all();
 		$this->template->server = $_SERVER;
+		$this->template->theme = $this->theme;
 
 		$this->benchmark->mark('public_controller_end');
 	}

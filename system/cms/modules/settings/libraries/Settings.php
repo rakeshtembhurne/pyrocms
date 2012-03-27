@@ -1,25 +1,12 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 /**
- * PyroCMS
- *
- * An open source CMS based on CodeIgniter
- *
- * @package		PyroCMS
- * @author		PyroCMS Dev Team
- * @license		http://pyrocms.com/legal/license
- * @link		http://pyrocms.com
- * @since		Version 1.0-dev
- * @filesource
- */
-
-/**
  * PyroCMS Settings Library
  *
  * Allows for an easy interface for site settings
  *
  * @author		Dan Horrigan <dan@dhorrigan.com>
- * @package		PyroCMS
- * @subpackage	Settings
+ * @author		PyroCMS Dev Team
+ * @package		PyroCMS\Core\Modules\Settings\Libraries
  */
 class Settings {
 
@@ -246,7 +233,7 @@ class Settings {
 				}
 				else
 				{
-					$setting->options = array('=' . lang('select.none'));
+					$setting->options = array('=' . lang('global:select-none'));
 				}
 			}
 
@@ -320,7 +307,7 @@ class Settings {
 						'checked'	=> $checked,
 						'value'		=> $value
 					));
-					$form_control .= ' ' . $label . '</label>';
+					$form_control .= ' ' . $label . '</label>&nbsp;&nbsp;';
 				}
 				break;
 
@@ -329,12 +316,12 @@ class Settings {
 				$form_control = '';
 				foreach ($this->_format_options($setting->options) as $value => $label)
 				{
-					$form_control .= '' . form_radio(array(
+					$form_control .= '<label class="inline">' . form_radio(array(
 						'id'		=> $setting->slug,
 						'name'		=> $setting->slug,
 						'checked'	=> $setting->value == $value,
 						'value'		=> $value
-					)) . ' ' . $label . '';
+					)) . ' ' . $label . '</label> ';
 				}
 				break;
 		}

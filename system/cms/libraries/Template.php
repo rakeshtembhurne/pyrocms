@@ -97,7 +97,7 @@ class Template
 		// If the parse is going to be used, best make sure it's loaded
 		if ($this->_parser_enabled === TRUE)
 		{
-			class_exists('CI_Parser') OR $this->_ci->load->library('parser');
+			$this->_ci->load->library('parser');
 		}
 
 		// Modular Separation / Modular Extensions has been detected
@@ -111,7 +111,7 @@ class Template
 		$this->_method 		= $this->_ci->router->fetch_method();
 
 		// Load user agent library if not loaded
-		class_exists('CI_User_agent') OR $this->_ci->load->library('user_agent');
+		$this->_ci->load->library('user_agent');
 
 		// We'll want to know this later
 		$this->_is_mobile = $this->_ci->agent->is_mobile();
@@ -185,9 +185,10 @@ class Template
 	 * @param	string	$view
 	 * @param	array	$data
 	 * @param	bool	$return
+	 * @param	bool	$IE_cache
 	 * @return	string
 	 */
-	public function build($view, $data = array(), $return = FALSE)
+	public function build($view, $data = array(), $return = FALSE, $IE_cache = TRUE)
 	{
 		// Set whatever values are given. These will be available to all view files
 		is_array($data) OR $data = (array) $data;
@@ -206,7 +207,7 @@ class Template
 		// Output template variables to the template
 		$template['title']			= $this->_title;
 		$template['breadcrumbs']	= $this->_breadcrumbs;
-		$template['metadata']		= $this->get_metadata();
+		$template['metadata']		= $this->get_metadata() . Asset::render('extra');
 		$template['partials']		= array();
 
 		// Assign by reference, as all loaded views will need access to partials
@@ -236,11 +237,15 @@ class Template
 		}
 
 		// Disable sodding IE7's constant cacheing!!
-		$this->_ci->output->set_header('Expires: Sat, 01 Jan 2000 00:00:01 GMT');
-		$this->_ci->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
-		$this->_ci->output->set_header('Cache-Control: post-check=0, pre-check=0, max-age=0');
-		$this->_ci->output->set_header('Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
-		$this->_ci->output->set_header('Pragma: no-cache');
+		// This is in a conditional because otherwise it errors when output is returned instead of output to browser.
+		if ($IE_cache)
+		{
+			$this->_ci->output->set_header('Expires: Sat, 01 Jan 2000 00:00:01 GMT');
+			$this->_ci->output->set_header('Cache-Control: no-store, no-cache, must-revalidate');
+			$this->_ci->output->set_header('Cache-Control: post-check=0, pre-check=0, max-age=0');
+			$this->_ci->output->set_header('Last-Modified: ' . gmdate( 'D, d M Y H:i:s' ) . ' GMT' );
+			$this->_ci->output->set_header('Pragma: no-cache');
+		}
 
 		// Let CI do the caching instead of the browser
 		$this->cache_lifetime > 0 && $this->_ci->output->cache( $this->cache_lifetime );
@@ -272,6 +277,12 @@ class Template
 		if ($this->_minify_enabled && function_exists('process_data_jmr1'))
 		{
 			$this->_body = process_data_jmr1($this->_body);
+		}
+		
+		// Now that *all* parsing is sure to be done we inject the {{ noparse }} contents back into the output
+		if (class_exists('Lex_Parser'))
+		{
+			$this->_body = Lex_Parser::inject_noparse($this->_body);
 		}
 
 		// Want it returned or output to browser?
@@ -340,6 +351,27 @@ class Template
 	{
 		$this->_metadata[$place][] = $line;
 
+		return $this;
+	}
+	
+	/**
+	 * Put extra javascipt, css, meta tags, etc after other head data
+	 *
+	 * @access	public
+	 * @param	string	$line	The line being added to head
+	 * @return	object	$this
+	 */
+	public function append_css($files, $min_file = null, $group = 'extra')
+	{
+		Asset::css($files, $min_file, $group);
+		
+		return $this;
+	}
+	
+	public function append_js($files, $min_file = null, $group = 'extra')
+	{
+		Asset::js($files, $min_file, $group);
+		
 		return $this;
 	}
 
@@ -739,6 +771,8 @@ class Template
 			$location		= $this->get_theme_path();
 			$theme_views	= array(
 				$this->get_views_path(TRUE) . 'modules/' . $this->_module . '/' . $view,
+				// This allows build('pages/page') to still overload same as build('page')
+				$this->get_views_path(TRUE) . 'modules/' . $view,
 				$this->get_views_path(TRUE) . $view
 			);
 

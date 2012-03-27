@@ -6,12 +6,9 @@ $lang['page_layouts.css_label'] 					= 'CSS';
 
 // labels
 $lang['page_layouts.updated_label'] 				= 'Gewijzigd';
-$lang['page_layouts.actions_label'] 				= 'Acties';
 $lang['page_layouts.title_label'] 					= 'Titel';
 $lang['page_layouts.theme_layout_label'] 			= 'Thema Layout';
-
-$lang['page_layouts.edit_label'] 					= 'Wijzig';
-$lang['page_layouts.delete_label'] 					= 'Verwijder';
+$lang['page_layouts.layout']             			= 'Layout';
 
 // titles
 $lang['page_layouts.list_title'] 					= 'Overzicht paginalayouts';

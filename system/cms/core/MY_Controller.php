@@ -1,15 +1,42 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-// Code here is run before ALL controllers
-class MY_Controller extends CI_Controller {
+require APPPATH."libraries/MX/Controller.php";
 
-	// Deprecated: No longer used globally
+/**
+ * Code here is run before ALL controllers
+ * 
+ * @package PyroCMS\Core\Controllers 
+ */
+class MY_Controller extends MX_Controller {
+
+	/**
+	 * No longer used globally
+	 * 
+	 * @deprecated remove in 2.2
+	 */
 	protected $data;
-	
+	/**
+	 * The name of the module that this controller instance actually belongs to.
+	 *
+	 * @var string 
+	 */
 	public $module;
+	/**
+	 * The name of the controller class for the current class instance.
+	 *
+	 * @var string
+	 */
 	public $controller;
+	/**
+	 * The name of the method for the current request.
+	 *
+	 * @var string 
+	 */
 	public $method;
 
+	/**
+	 * Load and set data for some common used libraries.
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -19,42 +46,12 @@ class MY_Controller extends CI_Controller {
 		// No record? Probably DNS'ed but not added to multisite
 		if ( ! defined('SITE_REF'))
 		{
-			show_error('This domain is not set up correctly.');
-		}
-		
-		// TODO: Remove this in v1.5 as it just renames tables for v1.4.0
-		if ($this->db->table_exists(SITE_REF.'_schema_version'))
-		{	
-			$this->load->dbforge();
-			if ($this->db->table_exists(SITE_REF.'_migrations'))
-			{
-				$this->dbforge->drop_table(SITE_REF.'_schema_version');
-			}
-			else
-			{
-				$this->dbforge->rename_table(SITE_REF.'_schema_version', SITE_REF.'_migrations');
-			}
-		}
-		
-		// Upgrading from something old? Erf, try to shoehorn them back on track
-		elseif ($this->db->table_exists('schema_version'))
-		{
-			$this->load->dbforge();
-			$this->dbforge->rename_table('schema_version', 'migrations');
-			
-			// Migration logic helps to make sure PyroCMS is running the latest changes
-			$this->load->library('migration');
-
-			if ( ! ($schema_version = $this->migration->version(28)))
-			{
-				show_error($this->migration->error_string());
-			}
-			redirect(current_url());
+			show_error('This domain is not set up correctly. Please go to '.anchor('sites') .' and log in to add this new site.');
 		}
 
 		// By changing the prefix we are essentially "namespacing" each site
 		$this->db->set_dbprefix(SITE_REF.'_');
-		
+
 		// Load the cache library now that we know the siteref
 		$this->load->library('pyrocache');
 
@@ -76,7 +73,7 @@ class MY_Controller extends CI_Controller {
 		}
 
 		// With that done, load settings
-		$this->load->library(array('settings/settings'));
+		$this->load->library(array('session', 'settings/settings'));
 
 		// Lock front-end language
 		if ( ! (is_a($this, 'Admin_Controller') && ($site_lang = AUTO_LANGUAGE)))
@@ -93,12 +90,15 @@ class MY_Controller extends CI_Controller {
 			}
 		}
 
-		define('CURRENT_LANGUAGE', $site_lang);
+		// What language us being used
+		defined('CURRENT_LANGUAGE') or define('CURRENT_LANGUAGE', $site_lang);
 
 		$langs = $this->config->item('supported_languages');
 
 		$pyro['lang'] = $langs[CURRENT_LANGUAGE];
 		$pyro['lang']['code'] = CURRENT_LANGUAGE;
+
+		$this->load->vars($pyro);
 
 		// Set php locale time
 		if (isset($langs[CURRENT_LANGUAGE]['codes']) && sizeof($locale = (array) $langs[CURRENT_LANGUAGE]['codes']) > 1)
@@ -113,49 +113,44 @@ class MY_Controller extends CI_Controller {
 		{
 			$this->config->set_item('language', $langs[CURRENT_LANGUAGE]['folder']);
 			$this->lang->is_loaded = array();
-			$this->lang->load(array('errors', 'main', 'users/user', 'settings/settings'));
+			$this->lang->load(array('errors', 'global', 'users/user', 'settings/settings', 'files/files'));
 		}
 		else
 		{
-			$this->lang->load(array('main', 'users/user'));
+			$this->lang->load(array('global', 'users/user', 'files/files'));
 		}
 
 		$this->load->library(array('events', 'users/ion_auth'));
 
 		// Use this to define hooks with a nicer syntax
-		$this->hooks = & $GLOBALS['EXT'];
+		ci()->hooks =& $GLOBALS['EXT'];
 
 		// Create a hook point with access to instance but before custom code
 		$this->hooks->_call_hook('post_core_controller_constructor');
 
-		// override ion_auth config.php settings with pyro db settings
-		$this->config->set_item('site_title', $this->settings->site_name, 'ion_auth');
-		$this->config->set_item('admin_email', $this->settings->contact_email, 'ion_auth');
-		$this->config->set_item('email_activation', $this->settings->activation_email, 'ion_auth');
-
 		// Load the user model and get user data
 		$this->load->library('users/ion_auth');
 
-		$this->template->current_user = $this->current_user = $this->ion_auth->get_user();
+		$this->template->current_user = ci()->current_user = $this->current_user = $this->ion_auth->get_user();
 
 		// Work out module, controller and method and make them accessable throught the CI instance
-		$this->module = $this->router->fetch_module();
-		$this->controller = $this->router->fetch_class();
-		$this->method = $this->router->fetch_method();
+		ci()->module = $this->module = $this->router->fetch_module();
+		ci()->controller = $this->controller = $this->router->fetch_class();
+		ci()->method = $this->method = $this->router->fetch_method();
 
 		// Loaded after $this->current_user is set so that data can be used everywhere
 		$this->load->model(array(
 			'permissions/permission_m',
 			'modules/module_m',
 			'pages/page_m',
-			'themes/themes_m'
+			'themes/theme_m',
 		));
 
 		// List available module permissions for this user
-		$this->permissions = $this->current_user ? $this->permission_m->get_group($this->current_user->group_id) : array();
+		ci()->permissions = $this->permissions = $this->current_user ? $this->permission_m->get_group($this->current_user->group_id) : array();
 
 		// Get meta data for the module
-		$this->template->module_details = $this->module_details = $this->module_m->get($this->module);
+		$this->template->module_details = ci()->module_details = $this->module_details = $this->module_m->get($this->module);
 
 		// If the module is disabled, then show a 404.
 		empty($this->module_details['enabled']) AND show_404();
@@ -165,19 +160,28 @@ class MY_Controller extends CI_Controller {
 			$_POST = $this->security->xss_clean($_POST);
 		}
 
-		$this->load->vars($pyro);
+		if ($this->module AND isset($this->module_details['path']))
+		{
+			Asset::add_path('module', $this->module_details['path'].'/');
+		}
 
 		$this->benchmark->mark('my_controller_end');
+		
+		// Enable profiler on local box
+	    if ((isset($this->current_user->group) AND $this->current_user->group == 'admin') AND is_array($_GET) AND array_key_exists('_debug', $_GET) )
+	    {
+			unset($_GET['_debug']);
+	    	$this->output->enable_profiler(TRUE);
+	    }
 	}
 }
 
 /**
- * Returns the CI object.
+ * Returns the CodeIgniter object.
  *
  * Example: ci()->db->get('table');
  *
- * @staticvar	object	$ci
- * @return		object
+ * @return \CI_Controller
  */
 function ci()
 {
